@@ -12,6 +12,8 @@
 
 #include <unistd.h>
 
+void	ft_print_second_comb(char a, char b, char c, char d);
+
 void	ft_print_comb2(void)
 {
 	char	a;
@@ -26,27 +28,33 @@ void	ft_print_comb2(void)
 		while (b <= '8')
 		{
 			c = '0';
-			while (c <= '9')
-			{
-				d = '0';
-				while (d <= '9')
-				{
-					if (a != c || b != d)
-					{
-						write(1, &a, 1);
-						write(1, &b, 1);
-						write(1, " ", 1);
-						write(1, &c, 1);
-						write(1, &d, 1);
-						write(1, ", ", 1);
-					}
-					d++;
-				}
-				c++;
-			}
+			d = '0';
+			ft_print_second_comb(a, b, c, d);
 			b++;
 		}
 		a++;
+	}
+}
+
+void	ft_print_second_comb(char a, char b, char c, char d)
+{
+	while (c <= '9')
+	{
+		d = '0';
+		while (d <= '9')
+		{
+			if (a != c || b != d)
+			{
+				write(1, &a, 1);
+				write(1, &b, 1);
+				write(1, " ", 1);
+				write(1, &c, 1);
+				write(1, &d, 1);
+				write(1, ", ", 1);
+			}
+			d++;
+		}
+		c++;
 	}
 }
 
