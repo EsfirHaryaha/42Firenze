@@ -22,13 +22,14 @@ void	ft_print_comb2(void)
 	char	d;
 
 	a = '0';
+	b = '0';
+	c = '0';
 	while (a <= '9')
 	{
 		b = '0';
 		while (b <= '8')
 		{
-			c = '0';
-			d = '0';
+			d = b + 1;
 			ft_print_second_comb(a, b, c, d);
 			b++;
 		}
@@ -40,7 +41,6 @@ void	ft_print_second_comb(char a, char b, char c, char d)
 {
 	while (c <= '9')
 	{
-		d = '0';
 		while (d <= '9')
 		{
 			if (a != c || b != d)
@@ -50,7 +50,13 @@ void	ft_print_second_comb(char a, char b, char c, char d)
 				write(1, " ", 1);
 				write(1, &c, 1);
 				write(1, &d, 1);
-				write(1, ", ", 1);
+				if (a == '9' && b == '8' && c == '9' && d == '9')
+				{
+				}
+				else
+				{
+					write(1, ", ", 2);
+				}
 			}
 			d++;
 		}
@@ -63,3 +69,7 @@ int	main(void)
 	ft_print_comb2();
 	return (0);
 }
+
+/*
+
+
