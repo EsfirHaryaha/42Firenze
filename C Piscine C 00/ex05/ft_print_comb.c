@@ -12,37 +12,31 @@
 
 #include <unistd.h>
 
-void ft_print_comb(void) {
-	
-	char a = '0';
-	char b = '0';
-	char c = '0';
+void	ft_print_comb(void)
+{
+	char	a;
+	char	b;
+	char	c;
 
-	while (a <= '9') {
-		
+	a = '0';
+	b = '0';
+	c = '0';
+	while (a <= '9')
+	{
 		b = a + 1;
-
-		while (b <= '9') {		
-			
+		while (b <= '9')
+		{
 			c = b + 1;
-			
-			while (c <= '9') {
+			while (c <= '9')
+			{
 				write(1, &a, 1);
 				write(1, &b, 1);
 				write(1, &c, 1);
 				write(1, ", ", 2);
 				c++;
 			}
-			
 			b++;
 		}
 		a++;
 	}
-
 }
-
-
-/* 012  
- *023
- *1
- */

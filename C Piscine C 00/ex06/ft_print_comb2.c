@@ -1,0 +1,47 @@
+#include <unistd.h>
+
+void ft_print_comb2(void)
+{
+	char	a;
+	char	b;
+	char	c;
+	char	d;
+	
+	a = '0';
+	
+	while (a <= '9')
+	{
+		b = '0';
+		while (b <= '8')
+		{
+			c = '0';
+			while (c <= '9')
+			{
+				d = '0';
+				while (d <= '9')
+				{
+					if (a != c || b != d)
+					{
+						write(1, &a, 1);  // scrive 'A'
+						write(1, &b, 1);  // scrive 'B'
+						write(1, " ", 1); 
+						write(1, &c, 1);  // scrive 'C'
+						write(1, &d, 1);  // scrive 'D'
+						write(1, ", ", 1);  
+					}
+					d++;
+				}
+				c++;
+			}
+			b++;
+		}
+		a++;
+	}
+}
+
+int	main(void)
+{
+	ft_print_comb2();
+	return (0);
+}
+

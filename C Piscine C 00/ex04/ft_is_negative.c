@@ -5,20 +5,26 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: eharyaha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/15 16:44:11 by eharyaha          #+#    #+#             */
-/*   Updated: 2025/10/15 16:48:11 by eharyaha         ###   ########.fr       */
+/*   Created: 2025/10/21 12:26:58 by eharyaha          #+#    #+#             */
+/*   Updated: 2025/10/21 12:27:25 by eharyaha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 
-void ft_is_negative(int n) {
-	char negativo = 'N';
-	char positivo = 'P';
+void	ft_is_negative(int n)
+{
+	char	negativo;
+	char	positivo;
 
-	if(n<0) {
+	negativo = 'N';
+	positivo = 'P';
+	if (n < 0)
+	{
 		write(1, &negativo, 1);
-	} else {
+	}
+	else
+	{
 		write(1, &positivo, 1);
 	}
 }
