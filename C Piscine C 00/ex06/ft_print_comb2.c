@@ -31,6 +31,7 @@ void	ft_print_comb2(void)
 		}
 		a++;
 	}
+	write(1, "\n", 1);
 }
 
 void	calcolo_secondo_numero(char a, char b)

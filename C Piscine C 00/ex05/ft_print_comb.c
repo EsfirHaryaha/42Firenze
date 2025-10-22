@@ -12,6 +12,8 @@
 
 #include <unistd.h>
 
+void	ft_print(char a, char b, char c);
+
 void	ft_print_comb(void)
 {
 	char	a;
@@ -29,16 +31,23 @@ void	ft_print_comb(void)
 			c = b + 1;
 			while (c <= '9')
 			{
-				write(1, &a, 1);
-				write(1, &b, 1);
-				write(1, &c, 1);
-				write(1, ", ", 2);
+				ft_print(a, b, c);
 				c++;
 			}
 			b++;
 		}
 		a++;
 	}
+	write(1, "\n", 1);
+}
+
+void	ft_print( char a, char b, char c)
+{
+	write(1, &a, 1);
+	write(1, &b, 1);
+	write(1, &c, 1);
+	if (!(a == '7' && b == '8' && c == '9'))
+		write(1, ", ", 2);			
 }
 
 /*int	main(void)
