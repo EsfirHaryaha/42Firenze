@@ -69,8 +69,8 @@ void	ft_print_caratteri(char a, char b, char c, char d)
 		write(1, ", ", 2);
 }
 
-int	main(void)
+/*int	main(void)
 {
 	ft_print_comb2();
 	return (0);
-}
+}*/

@@ -1,22 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_putnbr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eharyaha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/21 12:30:48 by eharyaha          #+#    #+#             */
-/*   Updated: 2025/10/21 12:30:53 by eharyaha         ###   ########.fr       */
+/*   Created: 2025/10/22 13:39:32 by eharyaha          #+#    #+#             */
+/*   Updated: 2025/10/22 13:39:36 by eharyaha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	ft_is_negative(int n);
+#include <unistd.h>
 
-int	main(void)
+void	ft_putnbr(int nb)
 {
-	int	n;
+	char	c;
 
-	n = -1;
-	ft_is_negative(n);
-	return (0);
+	if (nb >= 10)
+	{
+		ft_putnbr(nb / 10);
+	}
+	c = nb % 10 + '0';
+	write(1, &c, 1);
 }
+
+/*int	main(void)
+{
+	ft_putnbr(987654321);
+}*/
