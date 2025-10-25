@@ -1,0 +1,3 @@
+lo spazio in fondo alle righe, per controllare lanciare con | cat -e
+
+per il prossimo esame imparare bene i puntatori e le stringhe 
