@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strncpy.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eharyaha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/29 15:45:45 by eharyaha          #+#    #+#             */
+/*   Updated: 2025/10/29 15:45:47 by eharyaha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /*#include <stdio.h>
 
 char	*ft_strncpy(char *dest, char *src, unsigned int n);
@@ -25,5 +37,5 @@ char	*ft_strncpy(char *dest, char *src, unsigned int n)
 		i++;
 	}
 	dest[i] = '\0';
-	return dest;
+	return (dest);
 }

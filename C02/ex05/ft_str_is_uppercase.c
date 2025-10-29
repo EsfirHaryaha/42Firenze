@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_str_is_lowercase.c                              :+:      :+:    :+:   */
+/*   ft_str_is_uppercase.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eharyaha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/29 11:33:54 by eharyaha          #+#    #+#             */
-/*   Updated: 2025/10/29 11:34:06 by eharyaha         ###   ########.fr       */
+/*   Created: 2025/10/29 14:56:06 by eharyaha          #+#    #+#             */
+/*   Updated: 2025/10/29 14:56:10 by eharyaha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ int	ft_str_is_lowercase(char *str);
 
 int	main(void)
 {
-	char	*str= "tuttolowercase";
+	char	*str= "TUTTOUPPERCASE";
 	printf("\n\n%s : %d\n", str, ft_str_is_lowercase(str));
-	char	*str2 = "tuttoCamelCase";
+	char	*str2 = "CAMELcASEiNVERTITO";
 	printf("%s : %d\n", str2, ft_str_is_lowercase(str2));
-	char	*str3 = "stringa con spazi";
+	char	*str3 = "CON SPAZI";
 	printf("%s : %d\n", str3, ft_str_is_lowercase(str3));
-	char	*str4 = "numeri12345";
+	char	*str4 = "NUMERI123";
 	printf("%s : %d\n\n\n", str4, ft_str_is_lowercase(str4));
 }*/
 
@@ -33,7 +33,7 @@ int	ft_str_is_lowercase(char *str)
 	i = 0;
 	while (str[i] != '\0')
 	{
-		if (str[i] < 'a' || str[i] > 'z')
+		if (str[i] < 'A' || str[i] > 'Z')
 		{
 			return (0);
 		}
