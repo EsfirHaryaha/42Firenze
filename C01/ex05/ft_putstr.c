@@ -1,14 +1,16 @@
-/*#include <unistd.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_putstr.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eharyaha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/29 11:15:38 by eharyaha          #+#    #+#             */
+/*   Updated: 2025/10/29 11:15:41 by eharyaha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void	ft_putstr(char *str);
-
-int	main(void)
-{
-	char *str = "ciao come va";
-	ft_putstr(str);
-	write(1, "\n", 1);
-	return (0);
-}*/
+#include <unistd.h>
 
 void	ft_putstr(char *str)
 {
@@ -21,3 +23,13 @@ void	ft_putstr(char *str)
 		i++;
 	}
 }
+
+/*void	ft_putstr(char *str);
+
+int	main(void)
+{
+	char *str = "ciao come va";
+	ft_putstr(str);
+	write(1, "\n", 1);
+	return (0);
+}*/
