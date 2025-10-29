@@ -38,7 +38,6 @@ void	ft_print_comb(void)
 		}
 		a++;
 	}
-	write(1, "\n", 1);
 }
 
 void	ft_print( char a, char b, char c)
