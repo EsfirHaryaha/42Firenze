@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strlcat.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eharyaha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/05 17:21:27 by eharyaha          #+#    #+#             */
+/*   Updated: 2025/11/05 17:21:29 by eharyaha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /*#include <stdio.h>
 #include <string.h>
 
@@ -10,8 +22,8 @@ int	main(void)
 	char	dest2[30] = "Ciao ";
 	char	src2[] = "mondo!";
 
-	unsigned int	r1 = ft_strlcat(dest1, src1, 10);
-	unsigned int	r2 = strlcat(dest2, src2, 10);
+	unsigned int r1 = ft_strlcat(dest1, src1, 10);
+	unsigned int r2 = strlcat(dest2, src2, 10);
 
 	printf("\nCopia: \"%s\"  (ritorno: %u)\n", dest1, r1);
 	printf("Orig:  \"%s\"  (ritorno: %u)\n\n", dest2, r2);
