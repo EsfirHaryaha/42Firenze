@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_print_memory.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eharyaha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/05 16:49:33 by eharyaha          #+#    #+#             */
+/*   Updated: 2025/11/05 16:49:53 by eharyaha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /*#include <unistd.h>
 #include <stdio.h>
 
@@ -21,11 +33,18 @@ void	ft_putchar(char c)
 void	ft_puthex(unsigned long num, int digits)
 {
 	char	*base;
+	char	buffer[16];
+	int		i;
 
 	base = "0123456789abcdef";
-	if (digits > 1)
-		ft_puthex(num / 16, digits - 1);
-	ft_putchar(base[num % 16]);
+	i = digits - 1;
+	while (i >= 0)
+	{
+		buffer[i] = base[num & 0xF];
+		num >>= 4;
+		i--;
+	}
+	write(1, buffer, digits);
 }
 
 void	ft_print_hex_content(unsigned char *ptr, unsigned int size)
@@ -74,7 +93,14 @@ void	*ft_print_memory(void *addr, unsigned int size)
 	i = 0;
 	while (i < size)
 	{
-		line_size = (size - i >= 16) ? 16 : (size - i);
+		if (size - i >= 16)
+		{
+			line_size = 16;
+		}
+		else
+		{
+			line_size = (size - i);
+		}
 		ft_puthex((unsigned long)(ptr + i), 16);
 		write(1, ": ", 2);
 		ft_print_hex_content(ptr + i, line_size);
