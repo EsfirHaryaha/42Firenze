@@ -24,6 +24,9 @@ int	main(void)
 	printf("%s : %d\n", str3, ft_str_is_lowercase(str3));
 	char	*str4 = "numeri12345";
 	printf("%s : %d\n\n\n", str4, ft_str_is_lowercase(str4));
+	char *str5 = "";
+	printf("\"%s\" : %d\n", str5, ft_str_is_lowercase(str5));
+
 }*/
 
 int	ft_str_is_lowercase(char *str)

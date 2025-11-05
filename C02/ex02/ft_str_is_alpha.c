@@ -16,18 +16,25 @@ int	ft_str_is_alpha(char *str);
 
 int	main(void)
 {
-	char	*str1;
-	char	*str2;
-	int	ris1;
-	int	ris2;
+	char *tests[] = {
+		"stringaConSoloLettere",
+		"StringaMista123",
+		"Con Spazi",
+		"",
+		"ABCxyz",
+		"@lfa",
+		NULL
+	};
 
-	str1 = "stringa con spazi";
-	str2 = "stringaConSoloCaratteri";
-	ris1 = ft_str_is_alpha(str1);
-	ris2 = ft_str_is_alpha(str2);
-	printf("%s : %d\n", str1, ris1);
-	printf("%s : %d\n", str2, ris2);
-}*/
+	int i = 0;
+	while (tests[i])
+	{
+		printf("\"%s\" -> %d\n", tests[i], ft_str_is_alpha(tests[i]));
+		i++;
+	}
+	return (0);
+}
+*/
 
 int	ft_str_is_alpha(char *str)
 {

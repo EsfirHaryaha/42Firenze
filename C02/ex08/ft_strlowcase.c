@@ -1,17 +1,17 @@
 /*#include <stdio.h>
 
-char *ft_strupcase(char *str);
+char	*ft_strlowcase(char *str);
 
 int	main(void)
 {
-	char	str[20] = "tEstO Misto 12 -)+;";
+	char	str[30] = "TeStO MISTO 123 -)+;";
 	printf("\n\ninput: %s\n\nris: ", str);
-	ft_strupcase(str);
+	ft_strlowcase(str);
 	printf("%s\n\n\n", str);
 	return (0);
 }*/
 
-char *ft_strupcase(char *str)
+char	*ft_strlowcase(char *str)
 {
 	int	i;
 	int	dif;
@@ -20,11 +20,11 @@ char *ft_strupcase(char *str)
 	dif = 'a' - 'A';
 	while (str[i] != '\0')
 	{
-		if (str[i] >= 'a' && str[i] <= 'z')
+		if (str[i] >= 'A' && str[i] <= 'Z')
 		{
-			str[i] = str[i] - dif;
+			str[i] = str[i] + dif;
 		}
 		i++;
 	}
-	return str;
+	return (str);
 }

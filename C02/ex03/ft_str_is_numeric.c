@@ -16,14 +16,25 @@ int	ft_str_is_numeric(char *str);
 
 int	main(void)
 {
-	char	*str;
-	int	r;
+	char *tests[] = {
+		"123456",
+		"0000",
+		"123 456",
+		"12a45",
+		"",
+		"42",
+		NULL
+	};
 
-	str = "123 456";
-	r = 1;
-	r = ft_str_is_numeric(str);
-	printf("stringa numeri: %s risultato: %d\n", str, r);	
-}*/
+	int i = 0;
+	while (tests[i])
+	{
+		printf("\"%s\" -> %d\n", tests[i], ft_str_is_numeric(tests[i]));
+		i++;
+	}
+	return (0);
+}
+*/
 
 int	ft_str_is_numeric(char *str)
 {
@@ -32,7 +43,7 @@ int	ft_str_is_numeric(char *str)
 	i = 0;
 	while (str[i] != '\0')
 	{
-		if (!(str[i] - '0' >= 0 && str[i] - '0' <= 9))
+		if (str[i] < '0' || str[i] > '9')
 		{
 			return (0);
 		}
