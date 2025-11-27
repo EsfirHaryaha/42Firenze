@@ -5,6 +5,7 @@
 
 int	ft_isalpha(int c);
 int	ft_isdigit(int c);
+int	ft_isalnum(int c);
 
 int	main(int argc, char **argv)
 {
@@ -27,6 +28,15 @@ int	main(int argc, char **argv)
 		printf("input: '1' --> %d\n", ft_isdigit('1'));
 		printf("input: 0 --> %d\n", ft_isdigit(0));
 		return (0);
+	}
+	
+	if(strcmp(argv[1], "ft_isalnum") == 0)
+	{
+		printf("input: 1 --> %d\n", ft_isalnum(1));
+		printf("input: 'a' --> %d\n", ft_isalnum('a'));
+		printf("input: '1' --> %d\n", ft_isalnum('1'));
+		printf("input: 0 --> %d\n", ft_isalnum(0));
+		return(0);
 	}
 	
 	
