@@ -6,6 +6,7 @@
 int	ft_isalpha(int c);
 int	ft_isdigit(int c);
 int	ft_isalnum(int c);
+int	ft_isascii(int c);
 
 int	main(int argc, char **argv)
 {
@@ -39,6 +40,15 @@ int	main(int argc, char **argv)
 		return(0);
 	}
 	
+	if(strcmp(argv[1], "ft_isascii") == 0)
+	{
+		printf("input: 1 --> %d\n", ft_isascii(1));
+		printf("input: 127 --> %d\n", ft_isascii(127));
+		printf("input: a --> %d\n", ft_isascii('a'));
+		printf("input: 200 --> %d\n", ft_isascii(200));
+		printf("input non ascii: -1 --> %d\n", ft_isascii(-1));
+		return (0);
+	}
 	
 	printf("Funzione '%s' non trovata\n", argv[1]);
 	return (0);
