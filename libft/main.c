@@ -7,6 +7,7 @@ int	ft_isalpha(int c);
 int	ft_isdigit(int c);
 int	ft_isalnum(int c);
 int	ft_isascii(int c);
+int	ft_isprint(int c);
 
 int	main(int argc, char **argv)
 {
@@ -47,6 +48,16 @@ int	main(int argc, char **argv)
 		printf("input: a --> %d\n", ft_isascii('a'));
 		printf("input: 200 --> %d\n", ft_isascii(200));
 		printf("input non ascii: -1 --> %d\n", ft_isascii(-1));
+		return (0);
+	}
+	
+	if(strcmp(argv[1], "ft_isprint") == 0)
+	{
+		printf("input: ' ' (spazio) --> %d\n", ft_isprint(' '));
+		printf("input: 126 --> %d\n", ft_isprint(126));
+		printf("input: \\n --> %d\n", ft_isprint('\n'));
+		printf("input: 1 --> %d\n", ft_isprint(1));
+		printf("input: 127 --> %d\n", ft_isprint(127));
 		return (0);
 	}
 	
