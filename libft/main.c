@@ -8,6 +8,7 @@ int	ft_isdigit(int c);
 int	ft_isalnum(int c);
 int	ft_isascii(int c);
 int	ft_isprint(int c);
+size_t	ft_strlen(const char *c);
 
 int	main(int argc, char **argv)
 {
@@ -58,6 +59,15 @@ int	main(int argc, char **argv)
 		printf("input: \\n --> %d\n", ft_isprint('\n'));
 		printf("input: 1 --> %d\n", ft_isprint(1));
 		printf("input: 127 --> %d\n", ft_isprint(127));
+		return (0);
+	}
+	
+	if(strcmp(argv[1], "ft_strlen") == 0)
+	{
+		printf("input: ciao --> %ld\n", ft_strlen("ciao"));
+		printf("input: \"\" --> %ld\n", ft_strlen(""));
+		printf("input: \" \" --> %ld\n", ft_strlen(" "));
+		printf("input: 'ciao ciao' --> %ld\n", ft_strlen("ciao ciao"));
 		return (0);
 	}
 	
