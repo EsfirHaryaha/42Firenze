@@ -18,7 +18,7 @@ int	ft_iterative_factorial(int nb)
 {
 	int ris;
 
-	ris = iterated(1, nb);
+	ris = iterated(0, nb);
 	return ris;
 }
 
@@ -29,8 +29,8 @@ int	iterated(int ris, int nb)
 		return (ris);
 	}
 	else
-	{	
-	int	temp
+	{
+		int	temp = 0;
 		if(ris == 0)
 			temp = nb;
 		if(ris != 0)
@@ -45,7 +45,7 @@ int	iterated(int ris, int nb)
 
 int	main(void)
 {
-	int nb = 5;
+	int nb = 20;
 	int ris;
 	printf("numero %d ", nb);
 	ris = ft_iterative_factorial(nb);
