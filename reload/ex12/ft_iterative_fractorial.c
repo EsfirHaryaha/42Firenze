@@ -10,42 +10,35 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
+#include <limits.h>
 
 int	ft_iterative_factorial(int nb);
-int	iterated(int ris, int nb);
 
 int	ft_iterative_factorial(int nb)
 {
 	int ris;
 
-	ris = iterated(0, nb);
-	return ris;
-}
+	if (nb < 0)
+	{
+		return (0);
+	}
+	if (nb == 0)
+	{
+		return (1);
+	}
 
-int	iterated(int ris, int nb)
-{
-	if(nb == 1)
+	ris = 1;
+	while (nb > 1)
 	{
-		return (ris);
-	}
-	else
-	{
-		int	temp = 0;
-		if(ris == 0)
-			temp = nb;
-		if(ris != 0)
-			temp = ris;
-		ris = temp * (nb - 1);
-		printf(" - %d\n", ris);
+		ris = ris * nb;
 		nb--;
-		iterated(ris, nb);
 	}
-	return (0);
+	return (ris);
 }
 
 int	main(void)
 {
-	int nb = 20;
+	int nb = 5;
 	int ris;
 	printf("numero %d ", nb);
 	ris = ft_iterative_factorial(nb);
