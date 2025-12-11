@@ -29,7 +29,7 @@ void    ft_putstr(char *str)
         ft_putchar(str[i]);
         i++;
     }
-    write(1, "\n", 1);
+    ft_putchar('\n');
 }
 
 void    ft_putchar(char c)
