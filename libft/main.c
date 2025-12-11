@@ -6,7 +6,7 @@
 /*   By: eharyaha <eharyaha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 14:36:15 by eharyaha          #+#    #+#             */
-/*   Updated: 2025/12/11 14:36:17 by eharyaha         ###   ########.fr       */
+/*   Updated: 2025/12/11 15:11:34 by eharyaha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,15 @@ int	main(int argc, char **argv)
 		printf("input: \"\" --> %ld\n", ft_strlen(""));
 		printf("input: \" \" --> %ld\n", ft_strlen(" "));
 		printf("input: 'ciao ciao' --> %ld\n", ft_strlen("ciao ciao"));
+		return (0);
+	}
+
+	if(strcmp(argv[1], "ft_memset") == 0)
+	{
+		char buffer[10];
+
+		ft_memset(buffer, 'a', 5);
+		/* TESTARE MEMSET*/
 		return (0);
 	}
 	
