@@ -1,27 +1,39 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_range.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eharyaha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/11 13:23:52 by eharyaha          #+#    #+#             */
+/*   Updated: 2025/12/11 13:24:04 by eharyaha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include <stdio.h>
 #include <stdlib.h>
-int *ft_range(int min, int max);
 
-int *ft_range(int min, int max)
+int	*ft_range(int min, int max);
+
+int	*ft_range(int min, int max)
 {
-    int len;
-    int *array;
+	int	len;
+	int	*array;
 
-    len = max - min;
-    if(min >= max)
-        return (NULL);
-    array = malloc(sizeof(int) * len);
-    while(len > 0)
-    {
-        array[len - 1] = max--;
-        len--;
-    }
-    return (array);
+	len = max - min;
+	if (min >= max)
+		return (NULL);
+	array = malloc(sizeof(int) * len);
+	while (len > 0)
+	{
+		array[len - 1] = max--;
+		len--;
+	}
+	return (array);
 }
-
-int main(void)
+/*
+int	main(void)
 {
-    int a = 8;
+    int	a = 8;
     int b = 5;
     int *array = ft_range(a, b);
     if (!array)
@@ -36,3 +48,4 @@ int main(void)
     free(array);
     return (0);
 }
+*/
