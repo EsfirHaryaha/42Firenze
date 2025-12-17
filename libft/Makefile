@@ -1,11 +1,17 @@
+# Compilatore e flags
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -std=c99
 NAME = libft.a
 SRCS = $(wildcard ft_*.c)
 OBJS = $(SRCS:.c=.o)
 
-all: $(OBJS)
+all: $(NAME)
+
+$(NAME): $(OBJS)
 	ar rcs $(NAME) $(OBJS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	rm -f $(OBJS)

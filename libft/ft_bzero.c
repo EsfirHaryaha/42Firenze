@@ -9,12 +9,18 @@
 /*   Updated: 2025/12/11 15:17:42 by eharyaha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include <stddef.h>
 
-void bzero(void *s, size_t n)
+void    *ft_bzero(void *s, size_t n)
 {
-    while(n > 0)
+    size_t i;
+
+    i = 0;
+    unsigned char   *p = (unsigned char *)s;
+    while(i < n)
     {
-        *s[n] = 0;
-        n--;
+        p[i] = 0;
+        i++;
     }
+    return (s);
 }

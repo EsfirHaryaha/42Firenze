@@ -9,15 +9,16 @@
 /*   Updated: 2025/12/11 15:04:21 by eharyaha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include <stddef.h>
 
-int ft_memset(void *s, int c, size_t n)
+void    *ft_memset(void *s, int c, size_t n)
 {
     if (n == 0)
-        return (*s);
-    while (n > 0)
+        return (s);
+    unsigned char *p = (unsigned char *)s;
+    while (n--)
     {
-        *s[n] = c;
-        n--;
+        p[n] = c;
     }
     return (s);
 }
