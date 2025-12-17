@@ -6,7 +6,7 @@
 /*   By: eharyaha <eharyaha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 13:58:29 by eharyaha          #+#    #+#             */
-/*   Updated: 2025/12/17 19:33:48 by eharyaha         ###   ########.fr       */
+/*   Updated: 2025/12/17 20:27:45 by eharyaha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,3 +38,4 @@ char	*ft_strdup(const char *s);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strtrim(char const *s1, char const *set);
+char    **ft_split(char const *s, char c);

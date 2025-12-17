@@ -6,7 +6,7 @@
 /*   By: eharyaha <eharyaha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 14:36:15 by eharyaha          #+#    #+#             */
-/*   Updated: 2025/12/17 20:09:16 by eharyaha         ###   ########.fr       */
+/*   Updated: 2025/12/17 20:27:27 by eharyaha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,11 @@ int	main(int argc, char **argv)
 			"strdup",
 			"substr",
 			"strjoin", //25
-			"strtrim"
+			"strtrim",
+			"split"
 		};
 		funzioni = default_funzioni;
-		n_funzioni = 26;
+		n_funzioni = 27;
 	}
 	else
 	{
