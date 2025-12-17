@@ -6,7 +6,7 @@
 /*   By: eharyaha <eharyaha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 14:34:38 by eharyaha          #+#    #+#             */
-/*   Updated: 2025/12/11 14:34:43 by eharyaha         ###   ########.fr       */
+/*   Updated: 2025/12/17 20:05:58 by eharyaha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	ft_isalnum(int c)
 {
-	if(ft_isdigit(c) || ft_isalpha(c))
+	if (ft_isdigit(c) || ft_isalpha(c))
 	{
-		return(1);
+		return (1);
 	}
-	return(0);
+	return (0);
 }
