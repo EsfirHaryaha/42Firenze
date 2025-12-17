@@ -6,9 +6,11 @@
 /*   By: eharyaha <eharyaha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 15:15:00 by eharyaha          #+#    #+#             */
-/*   Updated: 2025/12/17 20:07:45 by eharyaha         ###   ########.fr       */
+/*   Updated: 2025/12/17 20:11:40 by eharyaha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <stdio.h>
 
 void	*ft_bzero(void *s, size_t n)
 {

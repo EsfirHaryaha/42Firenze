@@ -30,7 +30,7 @@ static	int	is_in_set(char c, char const *set)
 char	*ft_strtrim(char const *s1, char const *set)
 {
 	char	*ptr;
-	int		tart;
+	int		start;
 	int		end;
 	int		i;
 
