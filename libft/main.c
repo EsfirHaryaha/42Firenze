@@ -83,7 +83,7 @@ int	main(int argc, char **argv)
 			"strlcat",
 			"toupper",
 			"tolower",
-			"strchr",
+			"strchr", //15
 			"strrchr",
 			"strncmp",
 			"memchr",
@@ -93,10 +93,11 @@ int	main(int argc, char **argv)
 			"calloc",
 			"strdup",
 			"substr",
-			"strjoin"
+			"strjoin", //25
+			"strtrim"
 		};
 		funzioni = default_funzioni;
-		n_funzioni = 25;
+		n_funzioni = 26;
 	}
 	else
 	{
@@ -1074,6 +1075,107 @@ int test(char *function)
 		return (0);
 	}
 
+	if (strcmp(function, "strtrim") == 0)
+	{
+		printf("-------- TEST %s --------\n", function);
+
+		char *s1;
+		char *set;
+		char *ft;
+
+		/* 1️⃣ trim spazi davanti e dietro */
+		s1 = "   hello world   ";
+		set = " ";
+		ft = ft_strtrim(s1, set);
+		printf("%s -- \"%s\" | set=\"%s\" -> \"%s\"\n",
+			(strcmp(ft, "hello world") == 0) ? "PASS" : "FAIL",
+			s1, set, ft);
+		free(ft);
+
+		/* 2️⃣ nessun carattere da rimuovere */
+		s1 = "hello";
+		set = " ";
+		ft = ft_strtrim(s1, set);
+		printf("%s -- \"%s\" | set=\"%s\" -> \"%s\"\n",
+			(strcmp(ft, "hello") == 0) ? "PASS" : "FAIL",
+			s1, set, ft);
+		free(ft);
+
+		/* 3️⃣ trim solo davanti */
+		s1 = "xxxhello";
+		set = "x";
+		ft = ft_strtrim(s1, set);
+		printf("%s -- \"%s\" | set=\"%s\" -> \"%s\"\n",
+			(strcmp(ft, "hello") == 0) ? "PASS" : "FAIL",
+			s1, set, ft);
+		free(ft);
+
+		/* 4️⃣ trim solo dietro */
+		s1 = "helloxxx";
+		set = "x";
+		ft = ft_strtrim(s1, set);
+		printf("%s -- \"%s\" | set=\"%s\" -> \"%s\"\n",
+			(strcmp(ft, "hello") == 0) ? "PASS" : "FAIL",
+			s1, set, ft);
+		free(ft);
+
+		/* 5️⃣ trim davanti e dietro */
+		s1 = "xxhelloxx";
+		set = "x";
+		ft = ft_strtrim(s1, set);
+		printf("%s -- \"%s\" | set=\"%s\" -> \"%s\"\n",
+			(strcmp(ft, "hello") == 0) ? "PASS" : "FAIL",
+			s1, set, ft);
+		free(ft);
+
+		/* 6️⃣ set con più caratteri */
+		s1 = " \n\t42 Firenze\t\n ";
+		set = " \n\t";
+		ft = ft_strtrim(s1, set);
+		printf("%s -- \"%s\" | set=\"%s\" -> \"%s\"\n",
+			(strcmp(ft, "42 Firenze") == 0) ? "PASS" : "FAIL",
+			s1, set, ft);
+		free(ft);
+
+		/* 7️⃣ stringa tutta da trimmare */
+		s1 = "aaaaaa";
+		set = "a";
+		ft = ft_strtrim(s1, set);
+		printf("%s -- \"%s\" | set=\"%s\" -> \"%s\"\n",
+			(strcmp(ft, "") == 0) ? "PASS" : "FAIL",
+			s1, set, ft);
+		free(ft);
+
+		/* 8️⃣ stringa vuota */
+		s1 = "";
+		set = "abc";
+		ft = ft_strtrim(s1, set);
+		printf("%s -- stringa vuota -> \"%s\"\n",
+			(strcmp(ft, "") == 0) ? "PASS" : "FAIL",
+			ft);
+		free(ft);
+
+		/* 9️⃣ set vuoto */
+		s1 = "hello";
+		set = "";
+		ft = ft_strtrim(s1, set);
+		printf("%s -- set vuoto -> \"%s\"\n",
+			(strcmp(ft, "hello") == 0) ? "PASS" : "FAIL",
+			ft);
+		free(ft);
+
+		/* 🔟 caratteri interni NON rimossi */
+		s1 = "abXcdXef";
+		set = "abef";
+		ft = ft_strtrim(s1, set);
+		printf("%s -- \"%s\" | set=\"%s\" -> \"%s\"\n",
+			(strcmp(ft, "XcdX") == 0) ? "PASS" : "FAIL",
+			s1, set, ft);
+		free(ft);
+
+		printf("\n");
+		return (0);
+	}
 
 
 
