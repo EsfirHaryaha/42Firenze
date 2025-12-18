@@ -2089,78 +2089,118 @@ int test(char *function)
 
 		void *ft;
 		void *lib;
+		size_t nmemb, size;
+		int pass;
 
-		/* 1️⃣ allocazione normale */
-		ft = ft_calloc(5, sizeof(int));
-		lib = calloc(5, sizeof(int));
-		printf("%s -- allocazione normale\n",
-			(ft && is_all_zero(ft, 5 * sizeof(int))) ? "PASS" : "FAIL");
-		free(ft);
-		free(lib);
+		/* Test 1: allocazione normale */
+		nmemb = 5;
+		size = sizeof(int);
+		ft = ft_calloc(nmemb, size);
+		lib = calloc(nmemb, size);
+		pass = (ft != NULL && is_all_zero(ft, nmemb * size));
+		printf("%s -- Test: allocazione normale | Input: nmemb=%zu, size=%zu | Atteso: puntatore non-NULL, memoria inizializzata a 0 | Ottenuto: %s\n",
+			pass ? "PASS" : "FAIL", nmemb, size, pass ? "corretto" : "ERRORE");
+		if (ft) free(ft);
+		if (lib) free(lib);
 
-		/* 2️⃣ memoria inizializzata a zero (byte) */
-		ft = ft_calloc(10, 1);
-		printf("%s -- inizializzata a zero\n",
-			(ft && is_all_zero(ft, 10)) ? "PASS" : "FAIL");
-		free(ft);
+		/* Test 2: memoria inizializzata a zero (byte) */
+		nmemb = 10;
+		size = 1;
+		ft = ft_calloc(nmemb, size);
+		pass = (ft != NULL && is_all_zero(ft, nmemb * size));
+		printf("%s -- Test: inizializzazione a zero | Input: nmemb=%zu, size=%zu | Atteso: tutti byte = 0 | Ottenuto: %s\n",
+			pass ? "PASS" : "FAIL", nmemb, size, pass ? "corretto" : "ERRORE");
+		if (ft) free(ft);
 
-		/* 3️⃣ nmemb = 0 */
-		ft = ft_calloc(0, 10);
-		printf("%s -- nmemb = 0 (free valido)\n",
-			(ft != NULL) ? "PASS" : "FAIL");
-		free(ft);
+		/* Test 3: nmemb = 0 (SPECIFICA: deve restituire puntatore unico passabile a free()) */
+		nmemb = 0;
+		size = 10;
+		ft = ft_calloc(nmemb, size);
+		lib = calloc(nmemb, size);
+		pass = (ft != NULL && lib != NULL);
+		printf("%s -- Test: nmemb = 0 | Input: nmemb=%zu, size=%zu | Atteso: puntatore unico passabile a free() (std=%p) | Ottenuto: %p\n",
+			pass ? "PASS" : "FAIL", nmemb, size, lib, ft);
+		if (ft) free(ft);
+		if (lib) free(lib);
 
-		/* 4️⃣ size = 0 */
-		ft = ft_calloc(10, 0);
-		printf("%s -- size = 0 (free valido)\n",
-			(ft != NULL) ? "PASS" : "FAIL");
-		free(ft);
+		/* Test 4: size = 0 (SPECIFICA: deve restituire puntatore unico passabile a free()) */
+		nmemb = 10;
+		size = 0;
+		ft = ft_calloc(nmemb, size);
+		lib = calloc(nmemb, size);
+		pass = (ft != NULL && lib != NULL);
+		printf("%s -- Test: size = 0 | Input: nmemb=%zu, size=%zu | Atteso: puntatore unico passabile a free() (std=%p) | Ottenuto: %p\n",
+			pass ? "PASS" : "FAIL", nmemb, size, lib, ft);
+		if (ft) free(ft);
+		if (lib) free(lib);
 
-		/* 5️⃣ nmemb = 0, size = 0 */
-		ft = ft_calloc(0, 0);
-		printf("%s -- nmemb = 0, size = 0\n",
-			(ft != NULL) ? "PASS" : "FAIL");
-		free(ft);
+		/* Test 5: nmemb = 0, size = 0 (SPECIFICA: deve restituire puntatore unico passabile a free()) */
+		nmemb = 0;
+		size = 0;
+		ft = ft_calloc(nmemb, size);
+		lib = calloc(nmemb, size);
+		pass = (ft != NULL && lib != NULL);
+		printf("%s -- Test: nmemb = 0, size = 0 | Input: nmemb=%zu, size=%zu | Atteso: puntatore unico passabile a free() (std=%p) | Ottenuto: %p\n",
+			pass ? "PASS" : "FAIL", nmemb, size, lib, ft);
+		if (ft) free(ft);
+		if (lib) free(lib);
 
-		/* 6️⃣ confronto con libc (caso normale) */
-		ft = ft_calloc(7, sizeof(char));
-		lib = calloc(7, sizeof(char));
-		printf("%s -- confronto con libc (contenuto)\n",
-			(ft && lib && memcmp(ft, lib, 7) == 0) ? "PASS" : "FAIL");
-		free(ft);
-		free(lib);
+		/* Test 6: confronto contenuto con libc */
+		nmemb = 7;
+		size = sizeof(char);
+		ft = ft_calloc(nmemb, size);
+		lib = calloc(nmemb, size);
+		pass = (ft && lib && memcmp(ft, lib, nmemb * size) == 0);
+		printf("%s -- Test: confronto contenuto con libc | Input: nmemb=%zu, size=%zu | Atteso: contenuto identico a libc | Ottenuto: %s\n",
+			pass ? "PASS" : "FAIL", nmemb, size, pass ? "identico" : "diverso");
+		if (ft) free(ft);
+		if (lib) free(lib);
 
-		/* 7️⃣ overflow nmemb * size */
+		/* Test 7: overflow nmemb * size */
 		ft = ft_calloc(SIZE_MAX, SIZE_MAX);
-		printf("%s -- overflow (deve tornare NULL)\n",
-			(ft == NULL) ? "PASS" : "FAIL");
+		pass = (ft == NULL);
+		printf("%s -- Test: overflow (SIZE_MAX * SIZE_MAX) | Input: nmemb=SIZE_MAX, size=SIZE_MAX | Atteso: NULL | Ottenuto: %s\n",
+			pass ? "PASS" : "FAIL", ft ? "non-NULL" : "NULL");
 
-		/* 8️⃣ overflow realistico */
+		/* Test 8: overflow realistico */
 		ft = ft_calloc(SIZE_MAX / 2 + 1, 2);
-		printf("%s -- overflow realistico\n",
-			(ft == NULL) ? "PASS" : "FAIL");
+		pass = (ft == NULL);
+		printf("%s -- Test: overflow realistico | Input: nmemb=SIZE_MAX/2+1, size=2 | Atteso: NULL | Ottenuto: %s\n",
+			pass ? "PASS" : "FAIL", ft ? "non-NULL" : "NULL");
 
-		/* 9️⃣ grande allocazione (se possibile) */
-		ft = ft_calloc(1000, 1000);
-		if (ft)
+		/* Test 9: grande allocazione */
+		nmemb = 1000;
+		size = 1000;
+		ft = ft_calloc(nmemb, size);
+		pass = (ft != NULL);
+		if (pass)
 		{
-			printf("PASS -- grande allocazione\n");
+			pass = is_all_zero(ft, nmemb * size);
+			printf("%s -- Test: grande allocazione | Input: nmemb=%zu, size=%zu | Atteso: puntatore non-NULL, memoria inizializzata | Ottenuto: %s\n",
+				pass ? "PASS" : "FAIL", nmemb, size, pass ? "corretto" : "ERRORE");
 			free(ft);
 		}
 		else
-			printf("PASS -- grande allocazione (fallita ma accettabile)\n");
+			printf("PASS -- Test: grande allocazione | Input: nmemb=%zu, size=%zu | Atteso: allocazione (fallita ma accettabile) | Ottenuto: NULL\n",
+				nmemb, size);
 
-		/* 🔟 scrittura dopo calloc */
-		ft = ft_calloc(5, sizeof(int));
-		if (ft)
+		/* Test 10: scrittura dopo calloc */
+		nmemb = 5;
+		size = sizeof(int);
+		ft = ft_calloc(nmemb, size);
+		pass = (ft != NULL);
+		if (pass)
 		{
 			((int *)ft)[0] = 42;
 			((int *)ft)[4] = -42;
-			printf("PASS -- scrittura dopo calloc\n");
+			pass = (((int *)ft)[0] == 42 && ((int *)ft)[4] == -42);
+			printf("%s -- Test: scrittura dopo calloc | Input: nmemb=%zu, size=%zu | Atteso: memoria scrivibile | Ottenuto: %s\n",
+				pass ? "PASS" : "FAIL", nmemb, size, pass ? "scrivibile" : "ERRORE");
 			free(ft);
 		}
 		else
-			printf("FAIL -- scrittura dopo calloc\n");
+			printf("FAIL -- Test: scrittura dopo calloc | Input: nmemb=%zu, size=%zu | Atteso: allocazione riuscita | Ottenuto: NULL\n",
+				nmemb, size);
 
 		printf("\n");
 		return (0);
@@ -2228,47 +2268,76 @@ int test(char *function)
 		char *ft;
 		char s[] = "Hello";
 		char empty[] = "";
+		unsigned int start;
+		size_t len;
 
-		/* 1️⃣ Sottostringa all'inizio */
-		ft = ft_substr(s, 0, 2);
-		printf("%s -- s=\"%s\", start=0, len=2 | expected=\"He\", got=\"%s\"\n",
-			(ft && strcmp(ft, "He") == 0) ? "PASS" : "FAIL", s, ft);
+		/* Test 1: Sottostringa all'inizio */
+		start = 0;
+		len = 2;
+		ft = ft_substr(s, start, len);
+		printf("%s -- Test: sottostringa all'inizio | Input: s=\"%s\", start=%u, len=%zu | Atteso: \"He\" | Ottenuto: \"%s\"\n",
+			(ft && strcmp(ft, "He") == 0) ? "PASS" : "FAIL", s, start, len, ft ? ft : "NULL");
 		free(ft);
 
-		/* 2️⃣ Sottostringa in mezzo */
-		ft = ft_substr(s, 1, 3);
-		printf("%s -- s=\"%s\", start=1, len=3 | expected=\"ell\", got=\"%s\"\n",
-			(ft && strcmp(ft, "ell") == 0) ? "PASS" : "FAIL", s, ft);
+		/* Test 2: Sottostringa in mezzo */
+		start = 1;
+		len = 3;
+		ft = ft_substr(s, start, len);
+		printf("%s -- Test: sottostringa in mezzo | Input: s=\"%s\", start=%u, len=%zu | Atteso: \"ell\" | Ottenuto: \"%s\"\n",
+			(ft && strcmp(ft, "ell") == 0) ? "PASS" : "FAIL", s, start, len, ft ? ft : "NULL");
 		free(ft);
 
-		/* 3️⃣ Len maggiore di rimanente */
-		ft = ft_substr(s, 1, 10);
-		printf("%s -- s=\"%s\", start=1, len=10 | expected=\"ello\", got=\"%s\"\n",
-			(ft && strcmp(ft, "ello") == 0) ? "PASS" : "FAIL", s, ft);
+		/* Test 3: Len maggiore di rimanente (deve restituire solo i caratteri disponibili) */
+		start = 1;
+		len = 10;
+		ft = ft_substr(s, start, len);
+		printf("%s -- Test: len maggiore di rimanente | Input: s=\"%s\", start=%u, len=%zu | Atteso: \"ello\" | Ottenuto: \"%s\"\n",
+			(ft && strcmp(ft, "ello") == 0) ? "PASS" : "FAIL", s, start, len, ft ? ft : "NULL");
 		free(ft);
 
-		/* 4️⃣ Start oltre la fine */
-		ft = ft_substr(s, 10, 3);
-		printf("%s -- s=\"%s\", start=10, len=3 | expected=\"\", got=\"%s\"\n",
-			(ft && strcmp(ft, "") == 0) ? "PASS" : "FAIL", s, ft);
+		/* Test 4: Start oltre la fine (deve restituire stringa vuota) */
+		start = 10;
+		len = 3;
+		ft = ft_substr(s, start, len);
+		printf("%s -- Test: start oltre la fine | Input: s=\"%s\", start=%u, len=%zu | Atteso: \"\" | Ottenuto: \"%s\"\n",
+			(ft && strcmp(ft, "") == 0) ? "PASS" : "FAIL", s, start, len, ft ? ft : "NULL");
 		free(ft);
 
-		/* 5️⃣ Len = 0 */
-		ft = ft_substr(s, 2, 0);
-		printf("%s -- s=\"%s\", start=2, len=0 | expected=\"\", got=\"%s\"\n",
-			(ft && strcmp(ft, "") == 0) ? "PASS" : "FAIL", s, ft);
+		/* Test 5: Len = 0 (deve restituire stringa vuota) */
+		start = 2;
+		len = 0;
+		ft = ft_substr(s, start, len);
+		printf("%s -- Test: len = 0 | Input: s=\"%s\", start=%u, len=%zu | Atteso: \"\" | Ottenuto: \"%s\"\n",
+			(ft && strcmp(ft, "") == 0) ? "PASS" : "FAIL", s, start, len, ft ? ft : "NULL");
 		free(ft);
 
-		/* 6️⃣ Stringa vuota */
-		ft = ft_substr(empty, 0, 5);
-		printf("%s -- s=\"\", start=0, len=5 | expected=\"\", got=\"%s\"\n",
-			(ft && strcmp(ft, "") == 0) ? "PASS" : "FAIL", ft);
+		/* Test 6: Stringa vuota */
+		start = 0;
+		len = 5;
+		ft = ft_substr(empty, start, len);
+		printf("%s -- Test: stringa vuota | Input: s=\"\", start=%u, len=%zu | Atteso: \"\" | Ottenuto: \"%s\"\n",
+			(ft && strcmp(ft, "") == 0) ? "PASS" : "FAIL", start, len, ft ? ft : "NULL");
 		free(ft);
 
-		/* 7️⃣ Sottostringa fino alla fine */
-		ft = ft_substr(s, 2, 3);
-		printf("%s -- s=\"%s\", start=2, len=3 | expected=\"llo\", got=\"%s\"\n",
-			(ft && strcmp(ft, "llo") == 0) ? "PASS" : "FAIL", s, ft);
+		/* Test 7: Sottostringa fino alla fine */
+		start = 2;
+		len = 3;
+		ft = ft_substr(s, start, len);
+		printf("%s -- Test: sottostringa fino alla fine | Input: s=\"%s\", start=%u, len=%zu | Atteso: \"llo\" | Ottenuto: \"%s\"\n",
+			(ft && strcmp(ft, "llo") == 0) ? "PASS" : "FAIL", s, start, len, ft ? ft : "NULL");
+		free(ft);
+
+		/* Test 8: s = NULL (deve restituire NULL) */
+		ft = ft_substr(NULL, 0, 5);
+		printf("%s -- Test: s=NULL | Input: s=NULL, start=0, len=5 | Atteso: NULL | Ottenuto: %s\n",
+			(ft == NULL) ? "PASS" : "FAIL", ft ? "non-NULL" : "NULL");
+
+		/* Test 9: Intera stringa (start=0, len=strlen(s)) */
+		start = 0;
+		len = strlen(s);
+		ft = ft_substr(s, start, len);
+		printf("%s -- Test: intera stringa | Input: s=\"%s\", start=%u, len=%zu | Atteso: \"%s\" | Ottenuto: \"%s\"\n",
+			(ft && strcmp(ft, s) == 0) ? "PASS" : "FAIL", s, start, len, s, ft ? ft : "NULL");
 		free(ft);
 
 		printf("\n");
@@ -2440,6 +2509,17 @@ int test(char *function)
 			s1, set, ft);
 		free(ft);
 
+		/* 11️⃣ s1 = NULL (deve restituire NULL) */
+		ft = ft_strtrim(NULL, "abc");
+		printf("%s -- Test: s1=NULL | Input: s1=NULL, set=\"abc\" | Atteso: NULL | Ottenuto: %s\n",
+			(ft == NULL) ? "PASS" : "FAIL", ft ? "non-NULL" : "NULL");
+
+		/* 12️⃣ set = NULL (deve restituire NULL secondo l'implementazione) */
+		s1 = "hello";
+		ft = ft_strtrim(s1, NULL);
+		printf("%s -- Test: set=NULL | Input: s1=\"%s\", set=NULL | Atteso: NULL | Ottenuto: %s\n",
+			(ft == NULL) ? "PASS" : "FAIL", s1, ft ? "non-NULL" : "NULL");
+
 		printf("\n");
 		return (0);
 	}
@@ -2462,17 +2542,19 @@ int test(char *function)
 				printf("\n"); \
 			} while (0)
 	
-		/* Test 1: split normale */
+		/* Test 1: split normale (SPECIFICA: array deve terminare con NULL pointer) */
 		input = "hello world 42";
 		sep = ' ';
 		ft = ft_split(input, sep);
 		pass = (ft && strcmp(ft[0], "hello") == 0 &&
 		        strcmp(ft[1], "world") == 0 &&
 		        strcmp(ft[2], "42") == 0 &&
-		        ft[3] == NULL);
-		printf("%s -- Test: split normale | Input: \"%s\", sep='%c' | Atteso: [hello] [world] [42] | ", 
+		        ft[3] == NULL);  /* SPECIFICA: array termina con NULL pointer */
+		printf("%s -- Test: split normale | Input: \"%s\", sep='%c' | Atteso: [hello] [world] [42] NULL | Ottenuto: ", 
 			pass ? "PASS" : "FAIL", input, sep);
 		PRINT_SPLIT(ft);
+		if (pass && ft)
+			printf("  Verifica NULL pointer: %s\n", ft[3] == NULL ? "PASS (array termina con NULL)" : "FAIL");
 		if (ft) { i = 0; while (ft[i]) free(ft[i++]); free(ft); }
 	
 		/* Test 2: separatori multipli consecutivi */
