@@ -134,7 +134,7 @@ int	main(int argc, char **argv)
 			"lstmap"
 		};
 		funzioni = default_funzioni;
-		n_funzioni = 41;
+		n_funzioni = 43;
 	}
 	else
 	{
