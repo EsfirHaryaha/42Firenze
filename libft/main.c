@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <ctype.h>
+#include <fcntl.h>
 
 int test(char *function);
 
@@ -61,6 +62,24 @@ static void	print_atoi_test(char *s, int expected)
 		s, expected, ft);
 }
 
+/* duplica e moltiplica per 2 */
+void	*mul2(void *content)
+{
+	int	*res;
+
+	res = malloc(sizeof(int));
+	if (!res)
+		return (NULL);
+	*res = (*(int *)content) * 2;
+	return (res);
+}
+
+/* funzione del */
+void	del(void *content)
+{
+	free(content);
+}
+
 int	main(int argc, char **argv)
 {
 	char **funzioni;
@@ -96,10 +115,26 @@ int	main(int argc, char **argv)
 			"substr",
 			"strjoin", //25
 			"strtrim",
-			"split"
+			"split",
+			"itoa",
+			"strmapi",
+			"striteri",//30
+			"putchar_fd",
+			"putstr_fd",
+			"putendl_fd",
+			"putnbr_fd",
+			"lstnew",  //35
+			"lstadd_front",
+			"lstsize",
+			"lstlast",
+			"lstadd_back",
+			"lstdelone", //40
+			"lstclear",
+			"lstiter",
+			"lstmap"
 		};
 		funzioni = default_funzioni;
-		n_funzioni = 27;
+		n_funzioni = 41;
 	}
 	else
 	{
@@ -2705,10 +2740,973 @@ int test(char *function)
 	
 		printf("\n");
 		return 0;
+	}
+
+	if (strcmp(function, "itoa") == 0)
+	{
+		printf("-------- TEST %s --------\n", function);
+	
+		char *s;
+	
+		/* 1️⃣ zero */
+		s = ft_itoa(0);
+		printf("%s -- 0 -> \"0\"\n",
+			(s && strcmp(s, "0") == 0) ? "PASS" : "FAIL");
+		free(s);
+	
+		/* 2️⃣ numero positivo */
+		s = ft_itoa(42);
+		printf("%s -- 42 -> \"42\"\n",
+			(s && strcmp(s, "42") == 0) ? "PASS" : "FAIL");
+		free(s);
+	
+		/* 3️⃣ numero negativo */
+		s = ft_itoa(-42);
+		printf("%s -- -42 -> \"-42\"\n",
+			(s && strcmp(s, "-42") == 0) ? "PASS" : "FAIL");
+		free(s);
+	
+		/* 4️⃣ massimo int */
+		s = ft_itoa(2147483647);
+		printf("%s -- INT_MAX -> \"2147483647\"\n",
+			(s && strcmp(s, "2147483647") == 0) ? "PASS" : "FAIL");
+		free(s);
+	
+		/* 5️⃣ minimo int (CASO CRITICO) */
+		s = ft_itoa(-2147483648);
+		printf("%s -- INT_MIN -> \"-2147483648\"\n",
+			(s && strcmp(s, "-2147483648") == 0) ? "PASS" : "FAIL");
+		free(s);
+	
+		/* 6️⃣ numero a una cifra negativa */
+		s = ft_itoa(-1);
+		printf("%s -- -1 -> \"-1\"\n",
+			(s && strcmp(s, "-1") == 0) ? "PASS" : "FAIL");
+		free(s);
+	
+		/* 7️⃣ numero a una cifra positiva */
+		s = ft_itoa(7);
+		printf("%s -- 7 -> \"7\"\n",
+			(s && strcmp(s, "7") == 0) ? "PASS" : "FAIL");
+		free(s);
+	
+		/* 8️⃣ verifica che la stringa sia nuova (non statica) */
+		s = ft_itoa(123);
+		if (s)
+			s[0] = '9';
+		printf("%s -- memoria allocata correttamente\n",
+			(s && strcmp(s, "923") == 0) ? "PASS" : "FAIL");
+		free(s);
+	
+		printf("\n");
+		return (0);
+	}
+	
+	if (strcmp(function, "strmapi") == 0)
+	{
+		printf("-------- TEST %s --------\n", function);
+
+		char *res;
+
+		char	to_upper_even(unsigned int i, char c)
+		{
+			if (i % 2 == 0 && c >= 'a' && c <= 'z')
+				return (c - 32);
+			return (c);
+		}
+
+		char	add_index(unsigned int i, char c)
+		{
+			return (c + i);
+		}
+
+		char	always_x(unsigned int i, char c)
+		{
+			(void)i;
+			(void)c;
+			return ('x');
+		}
+
+		/* 1️⃣ stringa normale: maiuscole su indici pari */
+		res = ft_strmapi("ciao", to_upper_even);
+		printf("%s -- \"ciao\" -> \"CiAo\"\n",
+			(res && strcmp(res, "CiAo") == 0) ? "PASS" : "FAIL");
+		free(res);
+
+		/* 2️⃣ stringa vuota */
+		res = ft_strmapi("", to_upper_even);
+		printf("%s -- stringa vuota\n",
+			(res && strcmp(res, "") == 0) ? "PASS" : "FAIL");
+		free(res);
+
+		/* 3️⃣ funzione che usa l'indice */
+		res = ft_strmapi("abcd", add_index);
+		/* a+0 b+1 c+2 d+3 -> a c e g */
+		printf("%s -- usa indice (\"abcd\" -> \"aceg\")\n",
+			(res && strcmp(res, "aceg") == 0) ? "PASS" : "FAIL");
+		free(res);
+
+		/* 4️⃣ funzione che ignora input e ritorna sempre 'x' */
+		res = ft_strmapi("hello", always_x);
+		printf("%s -- funzione costante ('xxxxx')\n",
+			(res && strcmp(res, "xxxxx") == 0) ? "PASS" : "FAIL");
+		free(res);
+
+		/* 5️⃣ caratteri non alfabetici */
+		res = ft_strmapi("42!", to_upper_even);
+		printf("%s -- caratteri non alfabetici\n",
+			(res && strcmp(res, "42!") == 0) ? "PASS" : "FAIL");
+		free(res);
+
+		/* 6️⃣ s == NULL */
+		res = ft_strmapi(NULL, to_upper_even);
+		printf("%s -- s == NULL\n",
+			(res == NULL) ? "PASS" : "FAIL");
+
+		/* 7️⃣ f == NULL */
+		res = ft_strmapi("ciao", NULL);
+		printf("%s -- f == NULL\n",
+			(res == NULL) ? "PASS" : "FAIL");
+
+		printf("\n");
+		return (0);
+	}
+
+	if (strcmp(function, "striteri") == 0)
+	{
+		printf("-------- TEST %s --------\n", function);
+		char str[50];
+		int pass;
+
+		/* Funzioni di test dedicate solo a ft_striteri */
+		void to_upper_si(unsigned int i, char *c)
+		{
+			(void)i;
+			if (*c >= 'a' && *c <= 'z')
+				*c = *c - 'a' + 'A';
+		}
+
+		void add_index_si(unsigned int i, char *c)
+		{
+			*c = *c + i;
+		}
+
+		void mask_digits_si(unsigned int i, char *c)
+		{
+			(void)i;
+			if (*c >= '0' && *c <= '9')
+				*c = '*';
+		}
+
+		/* 1️⃣ stringa normale, trasforma minuscole in maiuscole */
+		strcpy(str, "hello World");
+		ft_striteri(str, to_upper_si);
+		pass = (strcmp(str, "HELLO WORLD") == 0);
+		printf("%s -- trasforma minuscole in maiuscole\n", pass ? "PASS" : "FAIL");
+
+		/* 2️⃣ aggiunge l'indice ai caratteri */
+		strcpy(str, "abcd");
+		ft_striteri(str, add_index_si);
+		pass = (strcmp(str, "aceg") == 0);
+		printf("%s -- aggiunge indice ai caratteri\n", pass ? "PASS" : "FAIL");
+
+		/* 3️⃣ sostituisce cifre con '*' */
+		strcpy(str, "p4ssw0rd123");
+		ft_striteri(str, mask_digits_si);
+		pass = (strcmp(str, "p*ssw*rd***") == 0);
+		printf("%s -- sostituisce cifre con '*'\n", pass ? "PASS" : "FAIL");
+
+		/* 4️⃣ stringa vuota */
+		str[0] = '\0';
+		ft_striteri(str, to_upper_si);
+		pass = (strcmp(str, "") == 0);
+		printf("%s -- stringa vuota rimane vuota\n", pass ? "PASS" : "FAIL");
+
+		/* 5️⃣ stringa con simboli, nessuna modifica */
+		strcpy(str, "!@# $%");
+		ft_striteri(str, to_upper_si);
+		pass = (strcmp(str, "!@# $%") == 0);
+		printf("%s -- simboli non modificati\n", pass ? "PASS" : "FAIL");
+
+		printf("\n");
+		return 0;
+	}
+
+	if (strcmp(function, "putchar_fd") == 0)
+	{
+		printf("-------- TEST %s --------\n", function);
+	
+		int fd;
+		char buffer[10];
+		int pass;
+	
+		/* 1️⃣ Test stdout catturato su file */
+		fd = open("tmp_stdout_putchar.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (fd < 0)
+		{
+			printf("FAIL -- impossibile aprire file\n");
+			return 0;
+		}
+		ft_putchar_fd('A', fd);
+		close(fd);
+	
+		fd = open("tmp_stdout_putchar.txt", O_RDONLY);
+		read(fd, buffer, 1);
+		close(fd);
+		buffer[1] = '\0';
+		pass = (strcmp(buffer, "A") == 0);
+		printf("%s -- scrittura singolo carattere su file\n", pass ? "PASS" : "FAIL");
+	
+		/* 2️⃣ Test su stderr */
+		/* Nota: difficile catturare stderr in C puro, ma possiamo almeno chiamarlo */
+		ft_putchar_fd('B', 2);
+		printf("-- controllo visivo, carattere 'B' dovrebbe apparire su stderr\n");
+	
+		/* 3️⃣ Test su file con più caratteri */
+		fd = open("tmp_file_putchar.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		ft_putchar_fd('X', fd);
+		ft_putchar_fd('Y', fd);
+		ft_putchar_fd('Z', fd);
+		close(fd);
+	
+		fd = open("tmp_file_putchar.txt", O_RDONLY);
+		read(fd, buffer, 3);
+		buffer[3] = '\0';
+		close(fd);
+		pass = (strcmp(buffer, "XYZ") == 0);
+		printf("%s -- scrittura multipla su file\n", pass ? "PASS" : "FAIL");
+	
+		printf("\n");
+		return 0;
+	}
+
+	if (strcmp(function, "putstr_fd") == 0)
+	{
+		printf("-------- TEST %s --------\n", function);
+	
+		int fd;
+		char buffer[100];
+		ssize_t n;
+		int pass;
+	
+		/* 1️⃣ Scrittura su file singola stringa */
+		fd = open("tmp_file_putstr.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (fd < 0)
+		{
+			printf("FAIL -- impossibile aprire file\n");
+			return 0;
+		}
+		ft_putstr_fd("Hello", fd);
+		close(fd);
+	
+		fd = open("tmp_file_putstr.txt", O_RDONLY);
+		if (fd < 0)
+		{
+			printf("FAIL -- impossibile aprire file in lettura\n");
+			return 0;
+		}
+		n = read(fd, buffer, sizeof(buffer) - 1);
+		close(fd);
+		if (n < 0) n = 0;
+		buffer[n] = '\0';
+		pass = (strcmp(buffer, "Hello") == 0);
+		printf("%s -- scrittura stringa 'Hello' su file\n", pass ? "PASS" : "FAIL");
+	
+		/* 2️⃣ Scrittura stringa vuota */
+		fd = open("tmp_file_putstr.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		ft_putstr_fd("", fd);
+		close(fd);
+	
+		fd = open("tmp_file_putstr.txt", O_RDONLY);
+		n = read(fd, buffer, sizeof(buffer) - 1);
+		close(fd);
+		if (n < 0) n = 0;
+		buffer[n] = '\0';
+		pass = (strcmp(buffer, "") == 0);
+		printf("%s -- scrittura stringa vuota\n", pass ? "PASS" : "FAIL");
+	
+		/* 3️⃣ Scrittura stringa lunga con simboli e numeri */
+		fd = open("tmp_file_putstr.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		ft_putstr_fd("123 !@# abc XYZ", fd);
+		close(fd);
+	
+		fd = open("tmp_file_putstr.txt", O_RDONLY);
+		n = read(fd, buffer, sizeof(buffer) - 1);
+		close(fd);
+		if (n < 0) n = 0;
+		buffer[n] = '\0';
+		pass = (strcmp(buffer, "123 !@# abc XYZ") == 0);
+		printf("%s -- scrittura stringa con numeri, simboli e lettere\n", pass ? "PASS" : "FAIL");
+	
+		/* 4️⃣ Scrittura su stderr (controllo visivo) */
+		ft_putstr_fd("Visual check on stderr", 2);
+		printf("\n-- verifica visiva, la stringa dovrebbe apparire su stderr\n");
+	
+		printf("\n");
+		return 0;
+	}
+	
+	if (strcmp(function, "putendl_fd") == 0)
+	{
+		printf("-------- TEST %s --------\n", function);
+	
+		int fd;
+		char buffer[100];
+		ssize_t n;
+		int pass;
+	
+		/* 1️⃣ Scrittura stringa + newline */
+		fd = open("tmp_file_putendl.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (fd < 0)
+		{
+			printf("FAIL -- impossibile aprire file\n");
+			return 0;
+		}
+		ft_putendl_fd("Hello", fd);
+		close(fd);
+	
+		fd = open("tmp_file_putendl.txt", O_RDONLY);
+		if (fd < 0)
+		{
+			printf("FAIL -- impossibile aprire file in lettura\n");
+			return 0;
+		}
+		n = read(fd, buffer, sizeof(buffer) - 1);
+		close(fd);
+		if (n < 0) n = 0;
+		buffer[n] = '\0';
+	
+		pass = (strcmp(buffer, "Hello\n") == 0);
+		printf("%s -- scrittura \"Hello\" + newline\n", pass ? "PASS" : "FAIL");
+	
+		/* 2️⃣ Stringa vuota → solo newline */
+		fd = open("tmp_file_putendl.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		ft_putendl_fd("", fd);
+		close(fd);
+	
+		fd = open("tmp_file_putendl.txt", O_RDONLY);
+		n = read(fd, buffer, sizeof(buffer) - 1);
+		close(fd);
+		if (n < 0) n = 0;
+		buffer[n] = '\0';
+	
+		pass = (strcmp(buffer, "\n") == 0);
+		printf("%s -- stringa vuota → solo newline\n", pass ? "PASS" : "FAIL");
+	
+		/* 3️⃣ Stringa con simboli e numeri */
+		fd = open("tmp_file_putendl.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		ft_putendl_fd("123 !@# abc XYZ", fd);
+		close(fd);
+	
+		fd = open("tmp_file_putendl.txt", O_RDONLY);
+		n = read(fd, buffer, sizeof(buffer) - 1);
+		close(fd);
+		if (n < 0) n = 0;
+		buffer[n] = '\0';
+	
+		pass = (strcmp(buffer, "123 !@# abc XYZ\n") == 0);
+		printf("%s -- stringa con numeri, simboli e lettere\n", pass ? "PASS" : "FAIL");
+	
+		/* 4️⃣ Scrittura su stderr (controllo visivo) */
+		ft_putendl_fd("Visual check on stderr", 2);
+		printf("\n-- verifica visiva: la riga sopra deve finire con newline\n");
+	
+		printf("\n");
+		return 0;
+	}
+
+	if (strcmp(function, "putnbr_fd") == 0)
+	{
+		printf("-------- TEST %s --------\n", function);
+	
+		int fd;
+		char buffer[100];
+		ssize_t n;
+		int pass;
+	
+		/* 1️⃣ numero positivo */
+		fd = open("tmp_file_putnbr.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		ft_putnbr_fd(42, fd);
+		close(fd);
+	
+		fd = open("tmp_file_putnbr.txt", O_RDONLY);
+		n = read(fd, buffer, sizeof(buffer) - 1);
+		close(fd);
+		if (n < 0) n = 0;
+		buffer[n] = '\0';
+	
+		pass = (strcmp(buffer, "42") == 0);
+		printf("%s -- numero positivo (42)\n", pass ? "PASS" : "FAIL");
+	
+		/* 2️⃣ numero negativo */
+		fd = open("tmp_file_putnbr.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		ft_putnbr_fd(-42, fd);
+		close(fd);
+	
+		fd = open("tmp_file_putnbr.txt", O_RDONLY);
+		n = read(fd, buffer, sizeof(buffer) - 1);
+		close(fd);
+		if (n < 0) n = 0;
+		buffer[n] = '\0';
+	
+		pass = (strcmp(buffer, "-42") == 0);
+		printf("%s -- numero negativo (-42)\n", pass ? "PASS" : "FAIL");
+	
+		/* 3️⃣ zero */
+		fd = open("tmp_file_putnbr.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		ft_putnbr_fd(0, fd);
+		close(fd);
+	
+		fd = open("tmp_file_putnbr.txt", O_RDONLY);
+		n = read(fd, buffer, sizeof(buffer) - 1);
+		close(fd);
+		if (n < 0) n = 0;
+		buffer[n] = '\0';
+	
+		pass = (strcmp(buffer, "0") == 0);
+		printf("%s -- zero (0)\n", pass ? "PASS" : "FAIL");
+	
+		/* 4️⃣ INT_MAX */
+		fd = open("tmp_file_putnbr.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		ft_putnbr_fd(2147483647, fd);
+		close(fd);
+	
+		fd = open("tmp_file_putnbr.txt", O_RDONLY);
+		n = read(fd, buffer, sizeof(buffer) - 1);
+		close(fd);
+		if (n < 0) n = 0;
+		buffer[n] = '\0';
+	
+		pass = (strcmp(buffer, "2147483647") == 0);
+		printf("%s -- INT_MAX\n", pass ? "PASS" : "FAIL");
+	
+		/* 5️⃣ INT_MIN */
+		fd = open("tmp_file_putnbr.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		ft_putnbr_fd(-2147483648, fd);
+		close(fd);
+	
+		fd = open("tmp_file_putnbr.txt", O_RDONLY);
+		n = read(fd, buffer, sizeof(buffer) - 1);
+		close(fd);
+		if (n < 0) n = 0;
+		buffer[n] = '\0';
+	
+		pass = (strcmp(buffer, "-2147483648") == 0);
+		printf("%s -- INT_MIN\n", pass ? "PASS" : "FAIL");
+	
+		/* 6️⃣ scrittura su stderr (controllo visivo) */
+		ft_putnbr_fd(1337, 2);
+		printf("\n-- verifica visiva: sopra deve apparire 1337\n");
+	
+		printf("\n");
+		return 0;
+	}
+	
+	if (strcmp(function, "lstnew") == 0)
+	{
+		printf("-------- TEST %s --------\n", function);
+	
+		t_list	*node;
+		int		x;
+		char	*str;
+		int		pass;
+	
+		/* 1️⃣ content = int */
+		x = 42;
+		node = ft_lstnew(&x);
+		pass = (node != NULL
+			&& node->content == &x
+			&& node->next == NULL);
+		printf("%s -- content = int\n", pass ? "PASS" : "FAIL");
+	
+		/* 2️⃣ content = stringa */
+		str = "hello";
+		node = ft_lstnew(str);
+		pass = (node != NULL
+			&& node->content == str
+			&& node->next == NULL);
+		printf("%s -- content = stringa\n", pass ? "PASS" : "FAIL");
+	
+		/* 3️⃣ content = NULL */
+		node = ft_lstnew(NULL);
+		pass = (node != NULL
+			&& node->content == NULL
+			&& node->next == NULL);
+		printf("%s -- content = NULL\n", pass ? "PASS" : "FAIL");
+	
+		printf("\n");
+		return (0);
 	}	
 
+	if (strcmp(function, "lstadd_front") == 0)
+	{
+		printf("-------- TEST %s --------\n", function);
+	
+		t_list *lst;
+		t_list *new;
+		int pass;
+	
+		/* 1️⃣ lista vuota */
+		lst = NULL;
+		new = ft_lstnew("first");
+		ft_lstadd_front(&lst, new);
+	
+		pass = (lst == new && lst->next == NULL);
+		printf("%s -- aggiunta su lista vuota\n", pass ? "PASS" : "FAIL");
+	
+		/* 2️⃣ lista con un nodo */
+		new = ft_lstnew("zero");
+		ft_lstadd_front(&lst, new);
+	
+		pass = (lst == new
+			&& strcmp(lst->content, "zero") == 0
+			&& strcmp(lst->next->content, "first") == 0
+			&& lst->next->next == NULL);
+		printf("%s -- aggiunta davanti a lista con 1 nodo\n", pass ? "PASS" : "FAIL");
+	
+		/* 3️⃣ lista con più nodi */
+		new = ft_lstnew("start");
+		ft_lstadd_front(&lst, new);
+	
+		pass = (lst == new
+			&& strcmp(lst->content, "start") == 0
+			&& strcmp(lst->next->content, "zero") == 0);
+		printf("%s -- aggiunta davanti a lista con più nodi\n", pass ? "PASS" : "FAIL");
+	
+		/* 4️⃣ new == NULL */
+		ft_lstadd_front(&lst, NULL);
+		pass = (strcmp(lst->content, "start") == 0);
+		printf("%s -- new == NULL (lista invariata)\n", pass ? "PASS" : "FAIL");
+	
+		/* 5️⃣ lst == NULL */
+		ft_lstadd_front(NULL, new);
+		printf("PASS -- lst == NULL (nessun crash)\n");
+	
+		printf("\n");
+		return (0);
+	}
+	
+	if (strcmp(function, "lstsize") == 0)
+	{
+		printf("-------- TEST %s --------\n", function);
+	
+		t_list *lst;
+		t_list *n1;
+		t_list *n2;
+		t_list *n3;
+		int size;
+		int pass;
+	
+		/* 1️⃣ lista NULL */
+		lst = NULL;
+		size = ft_lstsize(lst);
+		pass = (size == 0);
+		printf("%s -- lista NULL\n", pass ? "PASS" : "FAIL");
+	
+		/* 2️⃣ lista con un nodo */
+		lst = ft_lstnew("one");
+		size = ft_lstsize(lst);
+		pass = (size == 1);
+		printf("%s -- lista con 1 nodo\n", pass ? "PASS" : "FAIL");
+	
+		/* 3️⃣ lista con più nodi */
+		n1 = ft_lstnew("one");
+		n2 = ft_lstnew("two");
+		n3 = ft_lstnew("three");
+	
+		n1->next = n2;
+		n2->next = n3;
+		lst = n1;
+	
+		size = ft_lstsize(lst);
+		pass = (size == 3);
+		printf("%s -- lista con 3 nodi\n", pass ? "PASS" : "FAIL");
+	
+		/* 4️⃣ lista lunga */
+		n3->next = ft_lstnew("four");
+		n3->next->next = ft_lstnew("five");
+	
+		size = ft_lstsize(lst);
+		pass = (size == 5);
+		printf("%s -- lista con 5 nodi\n", pass ? "PASS" : "FAIL");
+	
+		/* 5️⃣ lista con contenuto NULL */
+		lst = ft_lstnew(NULL);
+		lst->next = ft_lstnew(NULL);
+	
+		size = ft_lstsize(lst);
+		pass = (size == 2);
+		printf("%s -- nodi con content NULL\n", pass ? "PASS" : "FAIL");
+	
+		printf("\n");
+		return (0);
+	}
+	
+	if (strcmp(function, "lstlast") == 0)
+	{
+		printf("-------- TEST %s --------\n", function);
+	
+		t_list *lst = NULL;
+		t_list *node1, *node2, *node3;
+		t_list *last;
+		int pass;
+	
+		/* 1️⃣ lista vuota */
+		last = ft_lstlast(lst);
+		pass = (last == NULL);
+		printf("%s -- lista vuota ritorna NULL\n", pass ? "PASS" : "FAIL");
+	
+		/* 2️⃣ lista con 1 nodo */
+		node1 = ft_lstnew("A");
+		lst = node1;
+		last = ft_lstlast(lst);
+		pass = (last == node1);
+		printf("%s -- lista 1 nodo ritorna nodo stesso\n", pass ? "PASS" : "FAIL");
+	
+		/* 3️⃣ lista con 2 nodi */
+		node2 = ft_lstnew("B");
+		node1->next = node2;
+		last = ft_lstlast(lst);
+		pass = (last == node2);
+		printf("%s -- lista 2 nodi ritorna ultimo nodo\n", pass ? "PASS" : "FAIL");
+	
+		/* 4️⃣ lista con 3 nodi */
+		node3 = ft_lstnew("C");
+		node2->next = node3;
+		last = ft_lstlast(lst);
+		pass = (last == node3);
+		printf("%s -- lista 3 nodi ritorna ultimo nodo\n", pass ? "PASS" : "FAIL");
+	
+		/* 5️⃣ controlla che lista non venga modificata */
+		pass = (lst == node1 && node1->next == node2 && node2->next == node3 && node3->next == NULL);
+		printf("%s -- lista originale intatta\n", pass ? "PASS" : "FAIL");
+	
+		/* pulizia */
+		free(node3);
+		free(node2);
+		free(node1);
+	
+		printf("\n");
+		return 0;
+	}
 
+	if (strcmp(function, "lstadd_back") == 0)
+	{
+		printf("-------- TEST %s --------\n", function);
+	
+		t_list *lst = NULL;
+		t_list *node1, *node2, *node3;
+		int pass;
+	
+		/* 1️⃣ aggiungere nodo a lista vuota */
+		node1 = ft_lstnew("A");
+		ft_lstadd_back(&lst, node1);
+		pass = (lst == node1 && lst->next == NULL);
+		printf("%s -- aggiunta nodo a lista vuota\n", pass ? "PASS" : "FAIL");
+	
+		/* 2️⃣ aggiungere secondo nodo */
+		node2 = ft_lstnew("B");
+		ft_lstadd_back(&lst, node2);
+		pass = (lst->next == node2 && node2->next == NULL);
+		printf("%s -- aggiunta secondo nodo in coda\n", pass ? "PASS" : "FAIL");
+	
+		/* 3️⃣ aggiungere terzo nodo */
+		node3 = ft_lstnew("C");
+		ft_lstadd_back(&lst, node3);
+		pass = (lst->next->next == node3 && node3->next == NULL);
+		printf("%s -- aggiunta terzo nodo in coda\n", pass ? "PASS" : "FAIL");
+	
+		/* 4️⃣ controlla integrità lista */
+		pass = (lst == node1 && lst->next == node2 && lst->next->next == node3);
+		printf("%s -- lista originale intatta\n", pass ? "PASS" : "FAIL");
+	
+		/* 5️⃣ aggiunta NULL (non deve fare nulla) */
+		ft_lstadd_back(&lst, NULL);
+		pass = (lst->next->next == node3 && node3->next == NULL);
+		printf("%s -- aggiunta NULL non modifica lista\n", pass ? "PASS" : "FAIL");
+	
+		/* pulizia */
+		free(node3);
+		free(node2);
+		free(node1);
+	
+		printf("\n");
+		return 0;
+	}
 
+	if (strcmp(function, "lstdelone") == 0)
+	{
+		printf("-------- TEST %s --------\n", function);
+	
+		t_list *node;
+		int pass;
+	
+		/* helper: funzione di deallocazione del contenuto */
+		void del(void *content)
+		{
+			free(content);
+		}
+	
+		/* 1️⃣ nodo singolo con contenuto dinamico */
+		node = malloc(sizeof(t_list));
+		node->content = malloc(10);
+		strcpy((char *)node->content, "hello");
+		node->next = NULL;
+		ft_lstdelone(node, del);
+		/* se il nodo è stato liberato, puntatore rimane invalidato, quindi passiamo direttamente */
+		printf("PASS -- nodo singolo liberato senza next\n");
+	
+		/* 2️⃣ nodo con next non nullo (next non deve essere liberato) */
+		t_list *first = malloc(sizeof(t_list));
+		t_list *second = malloc(sizeof(t_list));
+		first->content = malloc(6); strcpy((char *)first->content, "first");
+		first->next = second;
+		second->content = malloc(7); strcpy((char *)second->content, "second");
+		second->next = NULL;
+	
+		ft_lstdelone(first, del);
+		/* il secondo nodo deve rimanere valido */
+		pass = (second->content != NULL && strcmp((char *)second->content, "second") == 0);
+		printf("%s -- libera solo il nodo passato, next intatto\n", pass ? "PASS" : "FAIL");
+	
+		/* 3️⃣ nodo con content == NULL */
+		node = malloc(sizeof(t_list));
+		node->content = NULL;
+		node->next = NULL;
+		ft_lstdelone(node, del);
+		printf("PASS -- nodo con content NULL liberato senza errori\n");
+	
+		printf("\n");
+		return 0;
+	}
+
+	if (strcmp(function, "lstclear") == 0)
+	{
+		printf("-------- TEST %s --------\n", function);
+	
+		t_list *lst = NULL;
+		t_list *node1, *node2, *node3;
+		int pass;
+	
+		/* helper per del */
+		void del_int(void *content)
+		{
+			free(content);
+		}
+	
+		/* 1️⃣ lista NULL */
+		lst = NULL;
+		ft_lstclear(&lst, del_int);
+		pass = (lst == NULL);
+		printf("%s -- lista NULL rimane NULL\n", pass ? "PASS" : "FAIL");
+	
+		/* 2️⃣ lista con un solo nodo */
+		node1 = malloc(sizeof(t_list));
+		node1->content = malloc(sizeof(int));
+		*(int *)node1->content = 42;
+		node1->next = NULL;
+		lst = node1;
+	
+		ft_lstclear(&lst, del_int);
+		pass = (lst == NULL);
+		printf("%s -- lista con 1 nodo viene cancellata\n", pass ? "PASS" : "FAIL");
+	
+		/* 3️⃣ lista con più nodi */
+		node1 = malloc(sizeof(t_list));
+		node1->content = malloc(sizeof(int));
+		*(int *)node1->content = 1;
+	
+		node2 = malloc(sizeof(t_list));
+		node2->content = malloc(sizeof(int));
+		*(int *)node2->content = 2;
+	
+		node3 = malloc(sizeof(t_list));
+		node3->content = malloc(sizeof(int));
+		*(int *)node3->content = 3;
+	
+		node1->next = node2;
+		node2->next = node3;
+		node3->next = NULL;
+		lst = node1;
+	
+		ft_lstclear(&lst, del_int);
+		pass = (lst == NULL);
+		printf("%s -- lista con 3 nodi viene cancellata\n", pass ? "PASS" : "FAIL");
+	
+		/* 4️⃣ chiamata con lst valido ma del NULL (non deve fare nulla) */
+		node1 = malloc(sizeof(t_list));
+		node1->content = malloc(sizeof(int));
+		*(int *)node1->content = 99;
+		node1->next = NULL;
+		lst = node1;
+	
+		ft_lstclear(&lst, NULL); // del NULL, non fare nulla
+		pass = (lst == node1); // lista non modificata
+		printf("%s -- del NULL, lista non modificata\n", pass ? "PASS" : "FAIL");
+	
+		/* pulizia finale */
+		ft_lstclear(&lst, del_int);
+	
+		printf("\n");
+		return 0;
+	}
+
+	if (strcmp(function, "lstiter") == 0)
+	{
+		printf("-------- TEST %s --------\n", function);
+	
+		t_list *lst;
+		t_list *n1;
+		t_list *n2;
+		t_list *n3;
+		int pass;
+	
+		/* funzione di test: incrementa un int */
+		void inc_int(void *content)
+		{
+			(*(int *)content)++;
+		}
+	
+		/* funzione di test: azzera un int */
+		void zero_int(void *content)
+		{
+			*(int *)content = 0;
+		}
+	
+		/* 1️⃣ lista NULL */
+		lst = NULL;
+		ft_lstiter(lst, inc_int);
+		printf("PASS -- lista NULL (nessun crash)\n");
+	
+		/* 2️⃣ lista con un solo nodo */
+		n1 = malloc(sizeof(t_list));
+		n1->content = malloc(sizeof(int));
+		*(int *)n1->content = 41;
+		n1->next = NULL;
+		lst = n1;
+	
+		ft_lstiter(lst, inc_int);
+		pass = (*(int *)lst->content == 42);
+		printf("%s -- lista con 1 nodo, funzione applicata\n",
+			pass ? "PASS" : "FAIL");
+	
+		/* 3️⃣ lista con più nodi */
+		n1 = malloc(sizeof(t_list));
+		n2 = malloc(sizeof(t_list));
+		n3 = malloc(sizeof(t_list));
+	
+		n1->content = malloc(sizeof(int));
+		n2->content = malloc(sizeof(int));
+		n3->content = malloc(sizeof(int));
+	
+		*(int *)n1->content = 1;
+		*(int *)n2->content = 2;
+		*(int *)n3->content = 3;
+	
+		n1->next = n2;
+		n2->next = n3;
+		n3->next = NULL;
+		lst = n1;
+	
+		ft_lstiter(lst, inc_int);
+		pass = (*(int *)n1->content == 2
+			 && *(int *)n2->content == 3
+			 && *(int *)n3->content == 4);
+	
+		printf("%s -- funzione applicata a tutti i nodi\n",
+			pass ? "PASS" : "FAIL");
+	
+		/* 4️⃣ seconda funzione (reset a zero) */
+		ft_lstiter(lst, zero_int);
+		pass = (*(int *)n1->content == 0
+			 && *(int *)n2->content == 0
+			 && *(int *)n3->content == 0);
+	
+		printf("%s -- seconda funzione applicata correttamente\n",
+			pass ? "PASS" : "FAIL");
+	
+		/* 5️⃣ funzione NULL (non deve fare nulla, no crash) */
+		ft_lstiter(lst, NULL);
+		printf("PASS -- funzione NULL (nessun crash)\n");
+	
+		/* cleanup */
+		free(n1->content);
+		free(n2->content);
+		free(n3->content);
+		free(n1);
+		free(n2);
+		free(n3);
+	
+		printf("\n");
+		return 0;
+	}
+
+	if (strcmp(function, "lstmap") == 0)
+	{
+		printf("-------- TEST %s --------\n", function);
+	
+		t_list	*lst;
+		t_list	*new;
+		t_list	*tmp;
+		int		pass;
+		int		i;
+	
+		/* ---------- TEST 1: lista normale ---------- */
+		lst = NULL;
+		for (i = 1; i <= 3; i++)
+		{
+			int *n = malloc(sizeof(int));
+			*n = i;
+			ft_lstadd_back(&lst, ft_lstnew(n));
+		}
+	
+		new = ft_lstmap(lst, mul2, del);
+	
+		pass = 1;
+		tmp = new;
+		i = 2;
+		while (tmp)
+		{
+			if (*(int *)tmp->content != i)
+				pass = 0;
+			i += 2;
+			tmp = tmp->next;
+		}
+	
+		printf("%s -- mappa correttamente i contenuti\n", pass ? "PASS" : "FAIL");
+	
+		/* ---------- TEST 2: lista originale NON modificata ---------- */
+		tmp = lst;
+		i = 1;
+		while (tmp)
+		{
+			if (*(int *)tmp->content != i)
+				pass = 0;
+			i++;
+			tmp = tmp->next;
+		}
+	
+		printf("%s -- lista originale invariata\n", pass ? "PASS" : "FAIL");
+	
+		/* ---------- TEST 3: lista vuota ---------- */
+		new = ft_lstmap(NULL, mul2, del);
+		printf("%s -- lst == NULL\n", new == NULL ? "PASS" : "FAIL");
+	
+		/* ---------- TEST 4: f == NULL ---------- */
+		new = ft_lstmap(lst, NULL, del);
+		printf("%s -- f == NULL\n", new == NULL ? "PASS" : "FAIL");
+	
+		/* ---------- TEST 5: del == NULL ---------- */
+		new = ft_lstmap(lst, mul2, NULL);
+		printf("%s -- del == NULL\n", new == NULL ? "PASS" : "FAIL");
+	
+		/* ---------- CLEAN ---------- */
+		ft_lstclear(&lst, del);
+		ft_lstclear(&new, del);
+	
+		printf("\n");
+		return (0);
+	}
 
 	return (1);
 }
