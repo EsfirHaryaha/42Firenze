@@ -1,19 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_lstclear.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eharyaha <eharyaha@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/17 19:30:10 by eharyaha          #+#    #+#             */
+/*   Updated: 2025/12/20 18:38:36 by eharyaha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include "libft.h"
 
-void ft_lstclear(t_list **lst, void (*del)(void *))
+void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
-    t_list *tmp;
+	t_list	*tmp;
 
-    if (!lst || !del)
-        return;
-
-    while (*lst)
-    {
-        tmp = (*lst)->next;     // salva il prossimo nodo
-        del((*lst)->content);   // libera il contenuto
-        free(*lst);             // libera il nodo
-        *lst = tmp;             // passa al nodo successivo
-    }
-    *lst = NULL;                // lista completamente cancellata
+	if (!lst || !del)
+		return ;
+	while (*lst)
+	{
+		tmp = (*lst)->next;
+		del((*lst)->content);
+		free(*lst);
+		*lst = tmp;
+	}
+	*lst = NULL;
 }

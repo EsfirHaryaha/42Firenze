@@ -1196,344 +1196,224 @@ int test(char *function)
 	if (strcmp(function, "strlcpy") == 0)
 	{
 		printf("-------- TEST %s --------\n", function);
-	
-		char src[20] = "abcdefghi";
-		char dst1[10], dst2[10];
-		size_t ret_ft, ret_std, size;
-		int pass, i;
-		int first_diff = -1;
-	
-		/* Test 1: buffer più piccolo di src (troncamento) */
-		ft_memset(dst1, 'X', sizeof(dst1));
-		memset(dst2, 'X', sizeof(dst2));
-		size = 5;
-		ret_ft  = ft_strlcpy(dst1, src, size);
-		ret_std = strlcpy(dst2, src, size);
-		pass = (ret_ft == ret_std);
-		first_diff = -1;
-		for (i = 0; i < 10; i++)
-		{
-			if (dst1[i] != dst2[i])
-			{
-				pass = 0;
-				if (first_diff == -1) first_diff = i;
-			}
-		}
-		printf("%s -- Test: buffer piccolo (troncamento) | Input: src=\"%s\", dst inizializzato a 'X', size=%zu | ", 
-			pass ? "PASS" : "FAIL", src, size);
-		if (pass && ret_ft == strlen(src))
-		{
-			pass = (dst1[0] == 'a' && dst1[1] == 'b' && dst1[2] == 'c' && 
-			        dst1[3] == 'd' && dst1[4] == '\0');
-			printf("Atteso: ret=%zu, dst=\"abcd\\0\" | Ottenuto: ret=%zu, dst=%s\n", 
-				strlen(src), ret_ft, pass ? "corretto" : "ERRORE");
-		}
-		else
-			printf("Atteso: ret=%zu (std=%zu) | Ottenuto: ret=%zu, differenza a byte[%d]\n", 
-				strlen(src), ret_std, ret_ft, first_diff);
-	
-		/* Test 2: buffer grande abbastanza */
-		ft_memset(dst1, 'X', sizeof(dst1));
-		memset(dst2, 'X', sizeof(dst2));
-		size = sizeof(dst1);
-		ret_ft  = ft_strlcpy(dst1, src, size);
-		ret_std = strlcpy(dst2, src, size);
-		pass = (ret_ft == ret_std);
-		first_diff = -1;
-		for (i = 0; i < 10; i++)
-		{
-			if (dst1[i] != dst2[i])
-			{
-				pass = 0;
-				if (first_diff == -1) first_diff = i;
-			}
-		}
-		printf("%s -- Test: buffer grande | Input: src=\"%s\", dst inizializzato a 'X', size=%zu | ", 
-			pass ? "PASS" : "FAIL", src, size);
-		if (pass && ret_ft == strlen(src))
-		{
-			pass = (strcmp(dst1, src) == 0);
-			printf("Atteso: ret=%zu, dst=\"%s\" | Ottenuto: ret=%zu, dst=\"%s\"\n", 
-				strlen(src), src, ret_ft, pass ? dst1 : "ERRORE");
-		}
-		else
-			printf("Atteso: ret=%zu (std=%zu), dst=\"%s\" | Ottenuto: ret=%zu, differenza a byte[%d]\n", 
-				strlen(src), ret_std, src, ret_ft, first_diff);
-	
-		/* Test 3: size = 0 */
-		ft_memset(dst1, 'X', sizeof(dst1));
-		memset(dst2, 'X', sizeof(dst2));
-		size = 0;
-		ret_ft  = ft_strlcpy(dst1, src, size);
-		ret_std = strlcpy(dst2, src, size);
-		pass = (ret_ft == ret_std);
-		first_diff = -1;
-		for (i = 0; i < 10; i++)
-		{
-			if (dst1[i] != dst2[i])
-			{
-				pass = 0;
-				if (first_diff == -1) first_diff = i;
-			}
-		}
-		printf("%s -- Test: size = 0 | Input: src=\"%s\", dst inizializzato a 'X', size=%zu | ", 
-			pass ? "PASS" : "FAIL", src, size);
-		if (pass && ret_ft == strlen(src))
-		{
-			pass = 1;
-			for (i = 0; i < 10; i++)
-				if (dst1[i] != 'X') pass = 0;
-			printf("Atteso: ret=%zu, dst invariato | Ottenuto: ret=%zu, dst=%s\n", 
-				strlen(src), ret_ft, pass ? "invariato" : "ERRORE");
-		}
-		else
-			printf("Atteso: ret=%zu (std=%zu), dst invariato | Ottenuto: ret=%zu, differenza a byte[%d]\n", 
-				strlen(src), ret_std, ret_ft, first_diff);
-	
-		/* Test 4: stringa vuota */
-		ft_memset(dst1, 'X', sizeof(dst1));
-		memset(dst2, 'X', sizeof(dst2));
-		src[0] = '\0';
-		size = sizeof(dst1);
-		ret_ft  = ft_strlcpy(dst1, src, size);
-		ret_std = strlcpy(dst2, src, size);
-		pass = (ret_ft == ret_std);
-		first_diff = -1;
-		for (i = 0; i < 10; i++)
-		{
-			if (dst1[i] != dst2[i])
-			{
-				pass = 0;
-				if (first_diff == -1) first_diff = i;
-			}
-		}
-		printf("%s -- Test: src vuota | Input: src=\"\", dst inizializzato a 'X', size=%zu | ", 
-			pass ? "PASS" : "FAIL", size);
-		if (pass && ret_ft == 0)
-		{
-			pass = (dst1[0] == '\0');
-			printf("Atteso: ret=0, dst=\"\\0\" | Ottenuto: ret=%zu, dst=%s\n", 
-				ret_ft, pass ? "\"\\0\"" : "ERRORE");
-		}
-		else
-			printf("Atteso: ret=0 (std=%zu), dst=\"\\0\" | Ottenuto: ret=%zu, differenza a byte[%d]\n", 
-				ret_std, ret_ft, first_diff);
-	
-		/* Test 5: size = 1 (solo null terminator) */
-		ft_memset(dst1, 'X', sizeof(dst1));
-		memset(dst2, 'X', sizeof(dst2));
+
+		char src[20];
+		char dst[10];
+		size_t ret;
+		int pass;
+
+		/* =======================
+		Test 1: buffer piccolo
+		======================= */
 		strcpy(src, "abcdefghi");
-		size = 1;
-		ret_ft  = ft_strlcpy(dst1, src, size);
-		ret_std = strlcpy(dst2, src, size);
-		pass = (ret_ft == ret_std);
-		first_diff = -1;
-		for (i = 0; i < 10; i++)
-		{
-			if (dst1[i] != dst2[i])
-			{
-				pass = 0;
-				if (first_diff == -1) first_diff = i;
-			}
-		}
-		printf("%s -- Test: size = 1 | Input: src=\"%s\", dst inizializzato a 'X', size=%zu | ", 
-			pass ? "PASS" : "FAIL", src, size);
-		if (pass && ret_ft == strlen(src))
-		{
-			pass = (dst1[0] == '\0');
-			printf("Atteso: ret=%zu, dst=\"\\0\" | Ottenuto: ret=%zu, dst=%s\n", 
-				strlen(src), ret_ft, pass ? "\"\\0\"" : "ERRORE");
-		}
-		else
-			printf("Atteso: ret=%zu (std=%zu), dst=\"\\0\" | Ottenuto: ret=%zu, differenza a byte[%d]\n", 
-				strlen(src), ret_std, ret_ft, first_diff);
-	
+		ft_memset(dst, 'X', sizeof(dst));
+
+		ret = ft_strlcpy(dst, src, 5);
+
+		pass = (
+			ret == 9 &&               /* lunghezza src */
+			dst[0] == 'a' &&
+			dst[1] == 'b' &&
+			dst[2] == 'c' &&
+			dst[3] == 'd' &&
+			dst[4] == '\0'
+		);
+
+		printf("%s -- Test 1: buffer piccolo | ",
+			pass ? "PASS" : "FAIL");
+		printf("Atteso: ret=9, dst=\"abcd\\0\" | ");
+		printf("Ottenuto: ret=%zu, dst=\"%s\"\n", ret, dst);
+
+
+		/* ===========================
+		Test 2: buffer abbastanza grande
+		=========================== */
+		ft_memset(dst, 'X', sizeof(dst));
+		ret = ft_strlcpy(dst, src, sizeof(dst));
+
+		pass = (
+			ret == 9 &&
+			strcmp(dst, "abcdefghi") == 0
+		);
+
+		printf("%s -- Test 2: buffer grande | ",
+			pass ? "PASS" : "FAIL");
+		printf("Atteso: ret=9, dst=\"abcdefghi\" | ");
+		printf("Ottenuto: ret=%zu, dst=\"%s\"\n", ret, dst);
+
+
+		/* =======================
+		Test 3: size = 0
+		======================= */
+		ft_memset(dst, 'X', sizeof(dst));
+		ret = ft_strlcpy(dst, src, 0);
+
+		pass = (
+			ret == 9 &&
+			dst[0] == 'X' &&
+			dst[1] == 'X'
+		);
+
+		printf("%s -- Test 3: size = 0 | ",
+			pass ? "PASS" : "FAIL");
+		printf("Atteso: ret=9, dst invariato | ");
+		printf("Ottenuto: ret=%zu, dst[0]=%c\n", ret, dst[0]);
+
+
+		/* =======================
+		Test 4: src vuota
+		======================= */
+		src[0] = '\0';
+		ft_memset(dst, 'X', sizeof(dst));
+
+		ret = ft_strlcpy(dst, src, sizeof(dst));
+
+		pass = (
+			ret == 0 &&
+			dst[0] == '\0'
+		);
+
+		printf("%s -- Test 4: src vuota | ",
+			pass ? "PASS" : "FAIL");
+		printf("Atteso: ret=0, dst=\"\\0\" | ");
+		printf("Ottenuto: ret=%zu, dst[0]=%d\n", ret, dst[0]);
+
+
+		/* =======================
+		Test 5: size = 1
+		======================= */
+		strcpy(src, "abcdefghi");
+		ft_memset(dst, 'X', sizeof(dst));
+
+		ret = ft_strlcpy(dst, src, 1);
+
+		pass = (
+			ret == 9 &&
+			dst[0] == '\0'
+		);
+
+		printf("%s -- Test 5: size = 1 | ",
+			pass ? "PASS" : "FAIL");
+		printf("Atteso: ret=9, dst=\"\\0\" | ");
+		printf("Ottenuto: ret=%zu, dst[0]=%d\n", ret, dst[0]);
+
 		printf("\n");
-		return 0;
+		return (0);
 	}
+
 	
 	if (strcmp(function, "strlcat") == 0)
 	{
 		printf("-------- TEST %s --------\n", function);
-	
-		char dst1[15], dst2[15];
-		char src[10] = " dfgh";
-		size_t ret_ft, ret_std, size;
-		int pass, i;
-		int first_diff = -1;
-		size_t dst_len, src_len, expected_ret;
-	
-		/* Test 1: buffer abbastanza grande */
-		ft_memset(dst1, 0, sizeof(dst1));
-		memset(dst2, 0, sizeof(dst2));
-		strcpy(dst1, "abc");
-		strcpy(dst2, "abc");
-		dst_len = strlen(dst1);
-		src_len = strlen(src);
-		size = sizeof(dst1);
-		expected_ret = dst_len + src_len;
-		ret_ft  = ft_strlcat(dst1, src, size);
-		ret_std = strlcat(dst2, src, size);
-		pass = (ret_ft == ret_std);
-		first_diff = -1;
-		for (i = 0; i < sizeof(dst1); i++)
-		{
-			if (dst1[i] != dst2[i])
-			{
-				pass = 0;
-				if (first_diff == -1) first_diff = i;
-			}
-		}
-		printf("%s -- Test: buffer grande | Input: dst=\"abc\", src=\"%s\", size=%zu | ", 
-			pass ? "PASS" : "FAIL", src, size);
-		if (pass && ret_ft == expected_ret)
-		{
-			pass = (strcmp(dst1, "abc dfgh") == 0);
-			printf("Atteso: ret=%zu, dst=\"abc%s\" | Ottenuto: ret=%zu, dst=\"%s\"\n", 
-				expected_ret, src, ret_ft, pass ? dst1 : "ERRORE");
-		}
-		else
-			printf("Atteso: ret=%zu (std=%zu), dst=\"abc%s\" | Ottenuto: ret=%zu, differenza a byte[%d]\n", 
-				expected_ret, ret_std, src, ret_ft, first_diff);
-	
-		/* Test 2: buffer piccolo (troncamento) */
-		ft_memset(dst1, 0, sizeof(dst1));
-		memset(dst2, 0, sizeof(dst2));
-		strcpy(dst1, "abc");
-		strcpy(dst2, "abc");
-		dst_len = strlen(dst1);
-		src_len = strlen(src);
-		size = 5;
-		expected_ret = dst_len + src_len;
-		ret_ft  = ft_strlcat(dst1, src, size);
-		ret_std = strlcat(dst2, src, size);
-		pass = (ret_ft == ret_std);
-		first_diff = -1;
-		for (i = 0; i < 15; i++)
-		{
-			if (dst1[i] != dst2[i])
-			{
-				pass = 0;
-				if (first_diff == -1) first_diff = i;
-			}
-		}
-		printf("%s -- Test: buffer piccolo (troncamento) | Input: dst=\"abc\", src=\"%s\", size=%zu | ", 
-			pass ? "PASS" : "FAIL", src, size);
-		if (pass && ret_ft == expected_ret)
-		{
-			pass = (dst1[0] == 'a' && dst1[1] == 'b' && dst1[2] == 'c' && 
-			        dst1[3] == ' ' && dst1[4] == '\0');
-			printf("Atteso: ret=%zu, dst=\"abc \\0\" (troncato) | Ottenuto: ret=%zu, dst=%s\n", 
-				expected_ret, ret_ft, pass ? "corretto" : "ERRORE");
-		}
-		else
-			printf("Atteso: ret=%zu (std=%zu), dst troncato | Ottenuto: ret=%zu, differenza a byte[%d]\n", 
-				expected_ret, ret_std, ret_ft, first_diff);
-	
-		/* Test 3: size = 0 */
-		ft_memset(dst1, 0, sizeof(dst1));
-		memset(dst2, 0, sizeof(dst2));
-		strcpy(dst1, "abc");
-		strcpy(dst2, "abc");
-		dst_len = strlen(dst1);
-		src_len = strlen(src);
-		size = 0;
-		expected_ret = dst_len + src_len;
-		ret_ft  = ft_strlcat(dst1, src, size);
-		ret_std = strlcat(dst2, src, size);
-		pass = (ret_ft == ret_std);
-		first_diff = -1;
-		for (i = 0; i < 15; i++)
-		{
-			if (dst1[i] != dst2[i])
-			{
-				pass = 0;
-				if (first_diff == -1) first_diff = i;
-			}
-		}
-		printf("%s -- Test: size = 0 | Input: dst=\"abc\", src=\"%s\", size=%zu | ", 
-			pass ? "PASS" : "FAIL", src, size);
-		if (pass && ret_ft == expected_ret)
-		{
-			pass = (strcmp(dst1, "abc") == 0);
-			printf("Atteso: ret=%zu, dst invariato=\"abc\" | Ottenuto: ret=%zu, dst=\"%s\"\n", 
-				expected_ret, ret_ft, pass ? dst1 : "ERRORE");
-		}
-		else
-			printf("Atteso: ret=%zu (std=%zu), dst invariato | Ottenuto: ret=%zu, differenza a byte[%d]\n", 
-				expected_ret, ret_std, ret_ft, first_diff);
-	
-		/* Test 4: src vuota */
-		ft_memset(dst1, 0, sizeof(dst1));
-		memset(dst2, 0, sizeof(dst2));
-		strcpy(dst1, "abc");
-		strcpy(dst2, "abc");
+
+		char dst[15];
+		char src[10];
+		size_t ret;
+		int pass;
+
+		/* =======================
+		Test 1: buffer grande
+		======================= */
+		strcpy(dst, "abc");
+		strcpy(src, " dfgh");
+
+		ret = ft_strlcat(dst, src, sizeof(dst));
+
+		pass = (
+			ret == 8 &&                         /* 3 + 5 */
+			strcmp(dst, "abc dfgh") == 0
+		);
+
+		printf("%s -- Test 1: buffer grande | ",
+			pass ? "PASS" : "FAIL");
+		printf("Atteso: ret=8, dst=\"abc dfgh\" | ");
+		printf("Ottenuto: ret=%zu, dst=\"%s\"\n", ret, dst);
+
+
+		/* =======================
+		Test 2: buffer piccolo (troncamento)
+		size = 5 → spazio per 'a','b','c',' ','\0'
+		======================= */
+		strcpy(dst, "abc");
+		strcpy(src, " dfgh");
+
+		ret = ft_strlcat(dst, src, 5);
+
+		pass = (
+			ret == 8 &&
+			dst[0] == 'a' &&
+			dst[1] == 'b' &&
+			dst[2] == 'c' &&
+			dst[3] == ' ' &&
+			dst[4] == '\0'
+		);
+
+		printf("%s -- Test 2: buffer piccolo | ",
+			pass ? "PASS" : "FAIL");
+		printf("Atteso: ret=8, dst=\"abc \\0\" | ");
+		printf("Ottenuto: ret=%zu, dst=\"%s\"\n", ret, dst);
+
+
+		/* =======================
+		Test 3: size = 0
+		======================= */
+		strcpy(dst, "abc");
+		strcpy(src, " dfgh");
+
+		ret = ft_strlcat(dst, src, 0);
+
+		pass = (
+			ret == 5 &&                 /* len(src) + len(dst) */
+			strcmp(dst, "abc") == 0     /* dst invariato */
+		);
+
+		printf("%s -- Test 3: size = 0 | ",
+			pass ? "PASS" : "FAIL");
+		printf("Atteso: ret=8, dst invariato=\"abc\" | ");
+		printf("Ottenuto: ret=%zu, dst=\"%s\"\n", ret, dst);
+
+
+		/* =======================
+		Test 4: src vuota
+		======================= */
+		strcpy(dst, "abc");
 		src[0] = '\0';
-		dst_len = strlen(dst1);
-		src_len = 0;
-		size = sizeof(dst1);
-		expected_ret = dst_len + src_len;
-		ret_ft  = ft_strlcat(dst1, src, size);
-		ret_std = strlcat(dst2, src, size);
-		pass = (ret_ft == ret_std);
-		first_diff = -1;
-		for (i = 0; i < sizeof(dst1); i++)
-		{
-			if (dst1[i] != dst2[i])
-			{
-				pass = 0;
-				if (first_diff == -1) first_diff = i;
-			}
-		}
-		printf("%s -- Test: src vuota | Input: dst=\"abc\", src=\"\", size=%zu | ", 
-			pass ? "PASS" : "FAIL", size);
-		if (pass && ret_ft == expected_ret)
-		{
-			pass = (strcmp(dst1, "abc") == 0);
-			printf("Atteso: ret=%zu, dst=\"abc\" | Ottenuto: ret=%zu, dst=\"%s\"\n", 
-				expected_ret, ret_ft, pass ? dst1 : "ERRORE");
-		}
-		else
-			printf("Atteso: ret=%zu (std=%zu), dst=\"abc\" | Ottenuto: ret=%zu, differenza a byte[%d]\n", 
-				expected_ret, ret_std, ret_ft, first_diff);
-	
-		/* Test 5: dst vuota */
-		ft_memset(dst1, 0, sizeof(dst1));
-		memset(dst2, 0, sizeof(dst2));
-		dst1[0] = '\0';
-		dst2[0] = '\0';
+
+		ret = ft_strlcat(dst, src, sizeof(dst));
+
+		pass = (
+			ret == 3 &&
+			strcmp(dst, "abc") == 0
+		);
+
+		printf("%s -- Test 4: src vuota | ",
+			pass ? "PASS" : "FAIL");
+		printf("Atteso: ret=3, dst=\"abc\" | ");
+		printf("Ottenuto: ret=%zu, dst=\"%s\"\n", ret, dst);
+
+
+		/* =======================
+		Test 5: dst vuota
+		======================= */
+		dst[0] = '\0';
 		strcpy(src, "hello");
-		dst_len = 0;
-		src_len = strlen(src);
-		size = sizeof(dst1);
-		expected_ret = dst_len + src_len;
-		ret_ft  = ft_strlcat(dst1, src, size);
-		ret_std = strlcat(dst2, src, size);
-		pass = (ret_ft == ret_std);
-		first_diff = -1;
-		for (i = 0; i < sizeof(dst1); i++)
-		{
-			if (dst1[i] != dst2[i])
-			{
-				pass = 0;
-				if (first_diff == -1) first_diff = i;
-			}
-		}
-		printf("%s -- Test: dst vuota | Input: dst=\"\", src=\"%s\", size=%zu | ", 
-			pass ? "PASS" : "FAIL", src, size);
-		if (pass && ret_ft == expected_ret)
-		{
-			pass = (strcmp(dst1, src) == 0);
-			printf("Atteso: ret=%zu, dst=\"%s\" | Ottenuto: ret=%zu, dst=\"%s\"\n", 
-				expected_ret, src, ret_ft, pass ? dst1 : "ERRORE");
-		}
-		else
-			printf("Atteso: ret=%zu (std=%zu), dst=\"%s\" | Ottenuto: ret=%zu, differenza a byte[%d]\n", 
-				expected_ret, ret_std, src, ret_ft, first_diff);
-	
+
+		ret = ft_strlcat(dst, src, sizeof(dst));
+
+		pass = (
+			ret == 5 &&
+			strcmp(dst, "hello") == 0
+		);
+
+		printf("%s -- Test 5: dst vuota | ",
+			pass ? "PASS" : "FAIL");
+		printf("Atteso: ret=5, dst=\"hello\" | ");
+		printf("Ottenuto: ret=%zu, dst=\"%s\"\n", ret, dst);
+
 		printf("\n");
-		return 0;
-	}	
+		return (0);
+	}
+
 
 	if (strcmp(function, "toupper") == 0)
 	{
